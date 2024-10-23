@@ -8,6 +8,7 @@ class TimeDisplay extends StatefulWidget
   final Function(Duration newDuration) onTimeChanged;
 
   TimeDisplay({
+    super.key,
     required this.time,
     required this.label,
     required this.onTimeChanged,

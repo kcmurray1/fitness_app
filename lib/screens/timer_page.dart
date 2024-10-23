@@ -26,8 +26,9 @@ class _TimerPage extends State<TimerPage>
       if(!round.isEmpty())
       {
         rounds.add(RoundCard(
-          round,
-          roundCount,
+          key: ValueKey(round),
+          round: round,
+          roundNum: roundCount,
           isDeletable:  _isRemoveMode,
             onRemove: (){
               setState(() {intervalTimer.removeRound(round);});
@@ -39,13 +40,8 @@ class _TimerPage extends State<TimerPage>
     }
     return rounds;
   }
-  @override
-  Widget build(BuildContext context)
-  {
-    var intervalTimer = context.watch<IntervalTimer>();
-    intervalTimer.removeEmptyRounds();
 
-    List<Widget> buildContent()
+   List<Widget> buildContent(IntervalTimer intervalTimer)
     {
       if(!_isRemoveMode)
       {
@@ -76,6 +72,12 @@ class _TimerPage extends State<TimerPage>
         )
       ];
     }
+  @override
+  Widget build(BuildContext context)
+  {
+    var intervalTimer = context.watch<IntervalTimer>();
+    intervalTimer.removeEmptyRounds();
+
 
     return Stack(
       children: [
@@ -85,7 +87,7 @@ class _TimerPage extends State<TimerPage>
             // in the middle of the parent.
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: buildContent()
+              children: buildContent(intervalTimer)
             ),
           ),
         ),

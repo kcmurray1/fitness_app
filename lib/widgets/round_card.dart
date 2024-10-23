@@ -4,15 +4,18 @@ import 'phase_card.dart';
 /// Display [PhaseTimers] in this [Round] <br>
 /// Provides functionality for adding and removing timers from this [Round]
 class RoundCard extends StatefulWidget {
-  late Round? round;
-  late int roundNum;
+  final Round? round;
+  final int? roundNum;
   final Function onRemove;
   final bool isDeletable;
-  RoundCard(Round newRound, int roundNumber, {required this.isDeletable, required this.onRemove})
-  {
-    round = newRound;
-    roundNum = roundNumber;
-  }
+  RoundCard({
+    super.key,
+    this.round, 
+    this.roundNum, 
+    required this.isDeletable, 
+    required this.onRemove
+    });
+
   @override
   _RoundCard createState() => _RoundCard();
 }
@@ -82,7 +85,7 @@ class _RoundCard extends State<RoundCard> {
             ),
             
             for(var timer in widget.round!.phaseTimers)
-              PhaseCard(timer)
+              PhaseCard(timer: timer)
           ],
         ),
     );

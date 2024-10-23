@@ -5,11 +5,8 @@ import 'time_display.dart';
 /// Displays [PhaseTimer._workTime] and [PhaseTimer._restTime] time for a given [PhaseTimer]
 class PhaseCard extends StatefulWidget {
 
-  late PhaseTimer? timer;
-  PhaseCard(PhaseTimer newTimer)
-  {
-    timer = newTimer;
-  }
+  final PhaseTimer? timer;
+  PhaseCard({super.key, required this.timer});
 
   @override
   _PhaseCardState createState() => _PhaseCardState();
