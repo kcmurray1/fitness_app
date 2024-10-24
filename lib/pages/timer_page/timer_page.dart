@@ -6,12 +6,15 @@ import 'package:fitness_app/pages/timer_settings_page/timer_settings_page.dart';
 
 class TimerPage extends StatefulWidget
 {
-   @override
+  @override
   State<TimerPage> createState() => _TimerPage();
 }
 
 class _TimerPage extends State<TimerPage>
 {
+  Color restColor = Color.fromARGB(175, 226, 86, 86);
+  Color workColor = Color.fromARGB(207, 125, 220, 91);
+  
   List<Widget> buildContent(IntervalTimer intervalTimer)
     {
       return [
@@ -25,11 +28,13 @@ class _TimerPage extends State<TimerPage>
   {
     var intervalTimer = context.watch<IntervalTimer>();
     intervalTimer.removeEmptyRounds();
+    
 
 
     return Stack(
       children: [
         Scaffold(
+          backgroundColor: workColor,
           body: Center(
             // Center is a layout widget. It takes a single child and positions it
             // in the middle of the parent.

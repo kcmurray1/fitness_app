@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:fitness_app/models/interval_timer.dart';
-import 'package:fitness_app/pages/timer_page/widgets/round_card.dart';
+// Settings Widgets
+import 'package:fitness_app/pages/timer_settings_page/widgets/timer_advanced_settings.dart';
+import 'package:fitness_app/pages/timer_settings_page/widgets/timer_simple_settings.dart';
+
 
 class TimerSettingsPage extends StatefulWidget {
 
@@ -10,59 +11,13 @@ class TimerSettingsPage extends StatefulWidget {
 }
 
 class _TimerSettingsPage extends State<TimerSettingsPage> {
-  
-  List<Widget> displayRounds(IntervalTimer intervalTimer)
-  {
-    List<Widget> rounds = [];
-    int roundCount = 1;
-    for(var round in intervalTimer.rounds)
-    {
-      
-      if(!round.isEmpty())
-      {
-        rounds.add(RoundCard(
-          key: ValueKey(round),
-          round: round,
-          roundNum: roundCount,
-          isDeletable:  true,
-            onRemove: (){
-              setState(() {intervalTimer.removeRound(round);});
-            },
-          )
-        );
-        roundCount++;
-      } 
-    }
-    return rounds;
-  }
-
-  List<Widget> buildContent(IntervalTimer intervalTimer)
-    {
-      // Display all of the editable rounds
-      return [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          ElevatedButton(
-            onPressed: ((){
-              setState(intervalTimer.addRound);
-            }),
-            child: Icon(Icons.add),
-          ),
-          
-        ],
-      ),
-      Expanded(
-        child: ListView(
-          children: displayRounds(intervalTimer),
-        )
-      )
-      ];
-  }
+  // defualt to simple timer
+  bool _isSimpleTimer = true;
 
   @override
   Widget build(BuildContext context) {
-    var intervalTimer = context.watch<IntervalTimer>();
+    Color selectedButtonColor = Theme.of(context).colorScheme.surface;
+    Color unselectedButtonColor = Colors.grey;
 
     return Scaffold(
       appBar: AppBar(
@@ -72,8 +27,15 @@ class _TimerSettingsPage extends State<TimerSettingsPage> {
             children: [
               OutlinedButton(
                 onPressed: (){
-              
+                  setState((){
+                    _isSimpleTimer = true;
+                  });
                 },
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(
+                    color: _isSimpleTimer ? selectedButtonColor : unselectedButtonColor
+                  )
+                ),
                 child: Text(
                   "Simple",
                   style: TextStyle(
@@ -81,17 +43,27 @@ class _TimerSettingsPage extends State<TimerSettingsPage> {
                   )
                 )
               ),
-              ElevatedButton(onPressed: (){
-              
+              OutlinedButton(
+                onPressed: (){
+                setState(() {
+                  _isSimpleTimer = false;
+                });
               },
-              child: Text("Advanced")),
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(
+                  color: _isSimpleTimer ? unselectedButtonColor : selectedButtonColor
+                )
+              ),
+              child: Text("Advanced",
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.surface
+                  )
+                )
+              ),
             ],
           )
       ),
-      body: Column(
-        children:
-          buildContent(intervalTimer)
-      )
+      body: _isSimpleTimer ? TimerSimpleSettings() : TimerAdvancedSettings()
     );
   }
 }
