@@ -35,11 +35,10 @@ class IntervalTimer extends ChangeNotifier {
   {
     if(_totalRounds == _minimumTotalRounds)
     {
-      print("cannot remove any more rounds");
       return;
     }
-    print("removing ${round}");
     rounds.remove(round);
+    notifyListeners();
   }
 
 

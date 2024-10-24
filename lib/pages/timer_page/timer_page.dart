@@ -1,76 +1,24 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fitness_app/models/interval_timer.dart';
-import 'package:fitness_app/widgets/interval_timer_buttons.dart';
-import 'package:fitness_app/widgets/round_card.dart';
-
+import 'package:fitness_app/pages/timer_page/widgets/interval_timer_controls.dart';
+import 'package:fitness_app/pages/timer_settings_page/timer_settings_page.dart';
 
 class TimerPage extends StatefulWidget
 {
    @override
-  _TimerPage createState() => _TimerPage();
+  State<TimerPage> createState() => _TimerPage();
 }
 
 class _TimerPage extends State<TimerPage>
 {
-
-  bool _isRemoveMode = false;
-
-  List<Widget> displayRounds(IntervalTimer intervalTimer)
-  {
-    List<Widget> rounds = [];
-    int roundCount = 1;
-    for(var round in intervalTimer.rounds)
+  List<Widget> buildContent(IntervalTimer intervalTimer)
     {
-      
-      if(!round.isEmpty())
-      {
-        rounds.add(RoundCard(
-          key: ValueKey(round),
-          round: round,
-          roundNum: roundCount,
-          isDeletable:  _isRemoveMode,
-            onRemove: (){
-              setState(() {intervalTimer.removeRound(round);});
-            },
-          )
-        );
-        roundCount++;
-      } 
-    }
-    return rounds;
-  }
-
-   List<Widget> buildContent(IntervalTimer intervalTimer)
-    {
-      if(!_isRemoveMode)
-      {
-        return [
+      return [
           buildTimerDisplay(intervalTimer), 
           buildButton(intervalTimer, context),
         ];
-      }
-      // Display all of the editable rounds
-      return [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          ElevatedButton(
-            onPressed: ((){
-              setState(intervalTimer.addRound);
-            }),
-            child: Icon(Icons.add),
-          ),
-          
-        ],
-      ),
-      if(!intervalTimer.isStarted)
-        Expanded(
-          child: ListView(
-            children: displayRounds(intervalTimer),
-          )
-        )
-      ];
+     
     }
   @override
   Widget build(BuildContext context)
@@ -91,16 +39,19 @@ class _TimerPage extends State<TimerPage>
             ),
           ),
         ),
-        if(!intervalTimer.isStarted)
         Positioned(
           top: 0,
-          right: 0,
+          right:0,
           child: ElevatedButton(
-            onPressed: ((){
-              setState((){_isRemoveMode = !_isRemoveMode;});
-            }),
-            child: _isRemoveMode ? Icon(Icons.edit_off) : Icon(Icons.edit),
-          ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => TimerSettingsPage(),
+                    ),
+                  );
+                },
+                child: Icon(Icons.settings),
+            ),
         ),
       ],
     );
