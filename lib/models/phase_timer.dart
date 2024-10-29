@@ -9,17 +9,16 @@ class PhaseTimer extends ChangeNotifier {
   Duration _restTime = Duration();
   Duration _workTime = Duration();
   bool _isWorkPhase = true;
-  // Index this timer is in a round
-  int roundIndex = 0;
 
-  PhaseTimer(Duration timeOn, Duration timeOff, int index)
+  PhaseTimer({
+    Duration timeOn = const Duration(seconds: 10),
+    Duration timeOff = const Duration(seconds: 5)
+  })
   {
     setWorkTime(timeOn);
     setRestTime(timeOff);
     // Initially set the clock to use the work time
     setDuration(timeOn);
-    roundIndex = index;
-    // setDuration(seconds);
   }
 
   // The PhaseTimer is marked as complete after the

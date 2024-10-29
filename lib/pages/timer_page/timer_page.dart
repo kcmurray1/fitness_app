@@ -14,7 +14,7 @@ class _TimerPage extends State<TimerPage>
 {
   Color restColor = Color.fromARGB(175, 226, 86, 86);
   Color workColor = Color.fromARGB(207, 125, 220, 91);
-  
+
   List<Widget> buildContent(IntervalTimer intervalTimer)
     {
       return [
@@ -29,12 +29,10 @@ class _TimerPage extends State<TimerPage>
     var intervalTimer = context.watch<IntervalTimer>();
     intervalTimer.removeEmptyRounds();
     
-
-
     return Stack(
       children: [
         Scaffold(
-          backgroundColor: workColor,
+          // backgroundColor: workColor,
           body: Center(
             // Center is a layout widget. It takes a single child and positions it
             // in the middle of the parent.
@@ -48,6 +46,9 @@ class _TimerPage extends State<TimerPage>
           top: 0,
           right:0,
           child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: CircleBorder(),
+                ),
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -55,7 +56,8 @@ class _TimerPage extends State<TimerPage>
                     ),
                   );
                 },
-                child: Icon(Icons.settings),
+                child: Icon(Icons.settings,
+                size: 30),
             ),
         ),
       ],

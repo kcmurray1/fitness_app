@@ -5,12 +5,16 @@ class TimeDisplay extends StatefulWidget
 {
   final Duration time;
   final String label;
+  final Color labelColor;
+  final Color timeColor;
   final Function(Duration newDuration) onTimeChanged;
 
   TimeDisplay({
     super.key,
     required this.time,
-    required this.label,
+    this.label = "",
+    this.labelColor = Colors.white,
+    this.timeColor = Colors.white,
     required this.onTimeChanged,
   });
 
@@ -82,15 +86,17 @@ class _TimeDisplayState extends State<TimeDisplay> {
 
   @override
   Widget build(BuildContext context) {
+
     var cursorColor = Theme.of(context).colorScheme.inversePrimary;
     int timeDisplayLength = 2;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          widget.label,
-          style: TextStyle(fontSize: 30, color: Colors.white),
-        ),
+        if(widget.label != "")
+          Text(
+            widget.label,
+            style: TextStyle(fontSize: 30, color: widget.labelColor),
+          ),
         SizedBox(
           width: 50,
           child: TextFormField(
@@ -100,12 +106,12 @@ class _TimeDisplayState extends State<TimeDisplay> {
             maxLength: timeDisplayLength,
             buildCounter: (BuildContext context, {int? currentLength, int? maxLength, bool? isFocused}) => null,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 30, color: Colors.white),
+            style: TextStyle(fontSize: 30, color: widget.timeColor),
           ),
         ),
         Text(
           ":",
-          style: TextStyle(fontSize: 30, color: Colors.white),
+          style: TextStyle(fontSize: 30, color: widget.timeColor),
         ),
         SizedBox(
           width: 50,
@@ -116,12 +122,12 @@ class _TimeDisplayState extends State<TimeDisplay> {
             cursorColor: cursorColor,
             buildCounter: (BuildContext context, {int? currentLength, int? maxLength, bool? isFocused}) => null,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 30, color: Colors.white),
+            style: TextStyle(fontSize: 30, color: widget.timeColor),
           ),
         ),
         Text(
           ":",
-          style: TextStyle(fontSize: 30, color: Colors.white),
+          style: TextStyle(fontSize: 30, color: widget.timeColor),
         ),
         SizedBox(
           width: 50,
@@ -132,7 +138,7 @@ class _TimeDisplayState extends State<TimeDisplay> {
             cursorColor: cursorColor,
             buildCounter: (BuildContext context, {int? currentLength, int? maxLength, bool? isFocused}) => null,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 30, color: Colors.white),
+            style: TextStyle(fontSize: 30, color: widget.timeColor),
           ),
         ),
       ],

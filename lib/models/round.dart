@@ -8,29 +8,67 @@ class Round extends ChangeNotifier {
   int _phaseTimerIndex = 0;
   bool isStarted = false;
   int _defaultSets = 2;
-  Duration _defaultTimeOn = Duration(seconds: 5);
-  Duration _defaultRest = Duration(seconds:  2);
+  final Duration initWorkTime;
+  final Duration initRestTime;
   
-  Round()
+  Round({
+    this.initWorkTime = const Duration(seconds: -5),
+    this.initRestTime = const Duration(seconds:  -2)
+  })
   {
     for(int i = 0; i < _defaultSets; i++)
     {
-      addPhaseTimer(PhaseTimer(_defaultTimeOn, _defaultRest, i));
+      addTimer();
     }
   }
+
+  String get progress
+  {
+    return "${_phaseTimerIndex + 1}/${phaseTimers.length}";
+  }
+  String get currentTime
+  {
+    if(isEmpty())
+    {
+      return "Nothing";  
+    }
+    return phaseTimers[_phaseTimerIndex].formatDuration();
+  }
+
+  // Check if current PhaseTimer is running
+  bool get isRunning
+  {
+    return phaseTimers[_phaseTimerIndex].isRunning;
+  }
+
+  // Round is compelete whn all timers have been completed 
+  bool get isRoundComplete
+  {
+    return _phaseTimerIndex == phaseTimers.length - 1 && phaseTimers[_phaseTimerIndex].isComplete();
+  }
+
   void addTimer()
   {
-    PhaseTimer newTimer = PhaseTimer(_defaultTimeOn, _defaultRest, phaseTimers.length);
+    PhaseTimer newTimer = PhaseTimer(timeOn: initWorkTime, timeOff: initRestTime);
     newTimer.addListener(update);
     phaseTimers.add(newTimer);
     notifyListeners();
   }
-  void addPhaseTimer(PhaseTimer newTimer)
-  {
-    newTimer.addListener(update);
-    phaseTimers.add(newTimer);
 
-    notifyListeners();
+  void setAllWorkTime(Duration newTime)
+  {
+    for(PhaseTimer timer in phaseTimers)
+    {
+      timer.setWorkTime(newTime);
+    }
+  }
+
+  void setAllRestTime(Duration newTime)
+  {
+    for(PhaseTimer timer in phaseTimers)
+    {
+      timer.setRestTime(newTime);
+    }
   }
 
   bool isEmpty()
@@ -48,10 +86,9 @@ class Round extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Start the round
+  /// Start the PhaseTimer at the current [_phaseTimerIndex]
   void start()
   {
-    print("starting round...");
     if(this.isRunning)
     {
       return;
@@ -60,28 +97,18 @@ class Round extends ChangeNotifier {
     phaseTimers[_phaseTimerIndex].start();
     notifyListeners();
   }
-  String get progress
-  {
-    return "${_phaseTimerIndex + 1}/${phaseTimers.length}";
-  }
-  String get currentTime
-  {
-    if(isEmpty())
-    {
-      return "Nothing";  
-    }
-    return phaseTimers[_phaseTimerIndex].formatDuration();
-    // return phaseTimers[_phaseTimerIndex].durationAsString(phaseTimers[_phaseTimerIndex].getWorkTime());
-  }
-
+ 
   bool _isValidTimerIndex()
   {
     return _phaseTimerIndex < phaseTimers.length - 1;
   }
 
+  /// This method listens for changes in the current [PhaseTimer]
+  /// based on the state of the current [PhaseTimer] the round will sequentially
+  /// move to the next [PhaseTimer] until they have all completed
   void update()
   {
-    // Move to next timer
+    // Attempt to move to the next PhaseTimer in this round 
     if(_isValidTimerIndex() && phaseTimers[_phaseTimerIndex].isComplete())
     {
       phaseTimers[_phaseTimerIndex].stop();
@@ -113,18 +140,6 @@ class Round extends ChangeNotifier {
     }
     phaseTimers[_phaseTimerIndex].stop(reset: reset);
     notifyListeners();
-  }
-
-  // Check if current PhaseTimer is running
-  bool get isRunning
-  {
-    return phaseTimers[_phaseTimerIndex].isRunning;
-  }
-
-  // Round is compelete whn all timers have been completed 
-  bool get isRoundComplete
-  {
-    return _phaseTimerIndex == phaseTimers.length - 1 && phaseTimers[_phaseTimerIndex].isComplete();
   }
 
   @override

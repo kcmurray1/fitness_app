@@ -45,7 +45,7 @@ class _TimerAdvancedSettingState extends State<TimerAdvancedSettings>
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
             SizedBox(
-              width: 250,
+              width: 350,
               child: ElevatedButton(
                   onPressed: ((){
                   setState(intervalTimer.addRound);
@@ -60,6 +60,14 @@ class _TimerAdvancedSettingState extends State<TimerAdvancedSettings>
             child: ListView(
             children: displayRounds(intervalTimer),
             )
+        ),
+        
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(myHelper(intervalTimer.getTotalTime()),
+            style: TextStyle(fontSize: 30)),
+          ],
         )
         ];
     }
@@ -68,8 +76,20 @@ class _TimerAdvancedSettingState extends State<TimerAdvancedSettings>
     Widget build(BuildContext context)
     {
         var intervalTimer = context.watch<IntervalTimer>();
-        return Column(
-            children: buildDisplay(intervalTimer)
+        return Container(
+          color: Theme.of(context).colorScheme.inversePrimary,
+          child: Column(
+              children: buildDisplay(intervalTimer)
+          ),
         );
     }
+}
+
+
+String myHelper(Duration time)
+{
+  String h = time.inHours.remainder(60).toString().padLeft(2, '0');
+  String m = time.inMinutes.remainder(60).toString().padLeft(2, '0');
+  String s = time.inSeconds.remainder(60).toString().padLeft(2, '0');
+  return "$h:$m:$s";
 }

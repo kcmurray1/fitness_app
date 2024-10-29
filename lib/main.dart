@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fitness_app/pages/map_page/map.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:fitness_app/pages/timer_page/timer_page.dart';
 import 'package:fitness_app/models/interval_timer.dart';
@@ -20,10 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => IntervalTimer(
-        Duration(seconds: 10), 
-        Duration(seconds: 5),
-        ),
+      create: (context) => IntervalTimer(),
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -78,6 +76,10 @@ class _MyHomePageState extends State<MyHomePage> {
       builder: (context, constraints){
         return Scaffold(
         appBar: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            systemNavigationBarColor: Theme.of(context).colorScheme.primary
+            // statusBarColor: 
+          ),
           backgroundColor: Theme.of(context).primaryColor,
           title: Text(
             "Fit App",

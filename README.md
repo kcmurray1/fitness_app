@@ -36,9 +36,16 @@ Functionality Example:) '+': work time, '=': rest time
     - make round card
     - addSet() adds a timer
     - removeSet() removes a timer
-**NOTE #2**
-	- removing rounds removes the round at the end of the list and not the round that we want to remove
+**NOTE #2** [x]
+	- removing rounds removes the round at the end of the list and not the round that we want to remove 
 **NOTE #3:**
     - option to select rounds as pages (1-2, all, etc)
         - select sets within the round (odd, even, 1-2, etc.)
-	
+**NOTE #4:** Improve UI
+	- Simple time settings
+	- Advanced time settings	
+	- Timer Page
+		- alternate colors between work and rest time
+		- Audio
+			- ticking noise for the last 3-5 seconds
+		

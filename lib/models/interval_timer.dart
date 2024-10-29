@@ -14,18 +14,25 @@ class IntervalTimer extends ChangeNotifier {
   List<Round> rounds = [];
   int _minimumTotalRounds = 1;
 
-  IntervalTimer(Duration workTime, Duration restTime, {int numRounds = 2})
+  IntervalTimer({
+    Duration workTime = const Duration(seconds: 5), 
+    Duration restTime = const Duration(seconds:  2), 
+    int numRounds = 2
+  })
   {
     for(int i = 0; i < numRounds; i++)
     {
-      addRound();
+      addRound(workTime: workTime, restTime: restTime);
     }
-     _totalRounds = numRounds;
+    _totalRounds = numRounds;
   }
   
-  void addRound()
+  void addRound({
+    Duration workTime = const Duration(seconds: 5),
+    Duration restTime = const Duration (seconds: 2)
+  })
   {
-    Round newRound = Round();
+    Round newRound = Round(initWorkTime: workTime, initRestTime: restTime);
     newRound.addListener(update);
     rounds.add(newRound);
     _totalRounds++;
@@ -47,6 +54,37 @@ class IntervalTimer extends ChangeNotifier {
     rounds.removeWhere((round) => round.isEmpty());
     _totalRounds = rounds.length;
 
+  }
+
+  void setAllRoundsWorkTime(Duration newTime)
+  {
+    for(Round round in rounds)
+    {
+      round.setAllWorkTime(newTime);
+    }
+  }
+
+  void setAllRoundsRestTime(Duration newTime)
+  {
+    for(Round round in rounds)
+    {
+      round.setAllRestTime(newTime);
+    }
+    
+  }
+
+  Duration getTotalTime()
+  {
+    Duration totalTime = Duration();
+    for(Round round in rounds)
+    {
+      for(PhaseTimer timer in round.phaseTimers)
+      {
+        totalTime += timer.getWorkTime() + timer.getRestTime();
+      }
+      
+    }
+    return totalTime;
   }
   // Start the current round
   void startRound()
