@@ -77,8 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
         return Scaffold(
         appBar: AppBar(
           systemOverlayStyle: SystemUiOverlayStyle(
-            systemNavigationBarColor: Theme.of(context).colorScheme.primary
-            // statusBarColor: 
+            systemNavigationBarColor: Theme.of(context).colorScheme.primary,
+            statusBarColor: Theme.of(context).colorScheme.primary
           ),
           backgroundColor: Theme.of(context).primaryColor,
           title: Text(

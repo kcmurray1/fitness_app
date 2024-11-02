@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fitness_app/models/interval_timer.dart';
 import 'package:fitness_app/pages/timer_page/widgets/round_card.dart';
+import 'package:fitness_app/pages/timer_page/widgets/time_display.dart';
 
 class TimerAdvancedSettings extends StatefulWidget {
     @override
@@ -65,7 +66,7 @@ class _TimerAdvancedSettingState extends State<TimerAdvancedSettings>
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text(myHelper(intervalTimer.getTotalTime()),
+            Text(timeDisplay(intervalTimer.getTotalTime()),
             style: TextStyle(fontSize: 30)),
           ],
         )
@@ -86,10 +87,3 @@ class _TimerAdvancedSettingState extends State<TimerAdvancedSettings>
 }
 
 
-String myHelper(Duration time)
-{
-  String h = time.inHours.remainder(60).toString().padLeft(2, '0');
-  String m = time.inMinutes.remainder(60).toString().padLeft(2, '0');
-  String s = time.inSeconds.remainder(60).toString().padLeft(2, '0');
-  return "$h:$m:$s";
-}

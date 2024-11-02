@@ -89,7 +89,7 @@ class Round extends ChangeNotifier {
   /// Start the PhaseTimer at the current [_phaseTimerIndex]
   void start()
   {
-    if(this.isRunning)
+    if(isRunning)
     {
       return;
     }

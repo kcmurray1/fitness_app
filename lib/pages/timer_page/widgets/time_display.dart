@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
 
 // Editable display of time following the format '00:00:00'
-class TimeDisplay extends StatefulWidget
+class TimeDisplayField extends StatefulWidget
 {
   final Duration time;
   final String label;
   final Color labelColor;
   final Color timeColor;
+  final bool hideBorder;
   final Function(Duration newDuration) onTimeChanged;
 
-  TimeDisplay({
+  TimeDisplayField({
     super.key,
     required this.time,
     this.label = "",
     this.labelColor = Colors.white,
     this.timeColor = Colors.white,
+    this.hideBorder = false,
     required this.onTimeChanged,
   });
 
  @override
-  _TimeDisplayState createState() => _TimeDisplayState();
+  State<TimeDisplayField> createState() => _TimeDisplayFieldState();
 }
 
-class _TimeDisplayState extends State<TimeDisplay> {
+class _TimeDisplayFieldState extends State<TimeDisplayField> {
   late TextEditingController _hoursController;
   late TextEditingController _minutesController;
   late TextEditingController _secondsController;
@@ -144,4 +146,13 @@ class _TimeDisplayState extends State<TimeDisplay> {
       ],
     );
   }
+}
+
+/// Convert Duration into 00:00:00 format
+String timeDisplay(Duration time)
+{
+  String h = time.inHours.remainder(60).toString().padLeft(2, '0');
+  String m = time.inMinutes.remainder(60).toString().padLeft(2, '0');
+  String s = time.inSeconds.remainder(60).toString().padLeft(2, '0');
+  return "$h:$m:$s";
 }

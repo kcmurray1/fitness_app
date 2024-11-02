@@ -48,6 +48,14 @@ class IntervalTimer extends ChangeNotifier {
     notifyListeners();
   }
 
+  void removeLastRound()
+  {
+    if(rounds.length == _minimumTotalRounds)
+    {
+      return;
+    }
+    rounds.removeLast();
+  }
 
   void removeEmptyRounds()
   {

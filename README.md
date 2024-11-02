@@ -43,6 +43,7 @@ Functionality Example:) '+': work time, '=': rest time
         - select sets within the round (odd, even, 1-2, etc.)
 **NOTE #4:** Improve UI
 	- Simple time settings
+		- adding rounds adds default 
 	- Advanced time settings	
 	- Timer Page
 		- alternate colors between work and rest time

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fitness_app/models/phase_timer.dart';
-import 'time_display.dart';
+import 'package:fitness_app/pages/timer_page/widgets/time_display.dart';
 
 /// Displays [PhaseTimer._workTime] and [PhaseTimer._restTime] time for a given [PhaseTimer]
 class PhaseCard extends StatefulWidget {
@@ -9,7 +9,7 @@ class PhaseCard extends StatefulWidget {
   PhaseCard({super.key, required this.timer});
 
   @override
-  _PhaseCardState createState() => _PhaseCardState();
+  State<PhaseCard> createState() => _PhaseCardState();
 }
 
 class _PhaseCardState extends State<PhaseCard> {
@@ -23,7 +23,7 @@ class _PhaseCardState extends State<PhaseCard> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(children: [
-          TimeDisplay(
+          TimeDisplayField(
             time: widget.timer!.getWorkTime(),
             label: "Work",
             onTimeChanged: ((newWorkTime){
@@ -32,7 +32,7 @@ class _PhaseCardState extends State<PhaseCard> {
                 });
               }),
             ),
-            TimeDisplay(
+            TimeDisplayField(
               time: widget.timer!.getRestTime(),
               label: "Rest",
               onTimeChanged: ((newRestTime){
