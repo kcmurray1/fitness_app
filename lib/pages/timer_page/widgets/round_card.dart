@@ -41,20 +41,26 @@ class _RoundCard extends State<RoundCard> {
         Text(
           "round: ${widget.roundNum}",
           style: TextStyle(
+            color: Colors.white,
             fontSize: 30, 
-            fontWeight: FontWeight.bold
+            // fontWeight: FontWeight.bold
           ),
         ),
-        if(widget.isDeletable)
-            FilledButton.tonal(
-              onPressed: () {
-                if(widget.onRemove() != Null)
-                {
-                  widget.onRemove();
-                }
-              },
-              child: Icon(Icons.highlight_remove),
-            ),
+        FilledButton.tonal(
+          onPressed: (){},
+          child: Icon(Icons.more_horiz_sharp),
+        ),
+
+        // if(widget.isDeletable)
+        //     FilledButton.tonal(
+        //       onPressed: () {
+        //         if(widget.onRemove() != Null)
+        //         {
+        //           widget.onRemove();
+        //         }
+        //       },
+        //       child: Icon(Icons.highlight_remove),
+        //     ),
         // ElevatedButton(
         //   onPressed: (){
         //     setState(() {
@@ -75,20 +81,33 @@ class _RoundCard extends State<RoundCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).colorScheme.inversePrimary,
-      child: ListView(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          children: [
-            Center(
-              child: toggleRoundBar()
-            ),
-            
-            for(var timer in widget.round!.phaseTimers)
-              PhaseCard(timer: timer)
-          ],
-        ),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+        border: Border.all(
+          color: Theme.of(context).colorScheme.primary,
+        )
+      ),
+      child: Column(
+        children: [
+          Center(
+                    child: toggleRoundBar(),
+          ),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: ScrollPhysics(),
+            itemCount: widget.round!.phaseTimers.length,
+            itemBuilder: (context, index){
+              return Column(
+                children: [
+                  PhaseCard(timer: widget.round!.phaseTimers[index]),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
     );
+
   }
 }
 

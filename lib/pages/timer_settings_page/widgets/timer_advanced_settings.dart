@@ -21,15 +21,21 @@ class _TimerAdvancedSettingState extends State<TimerAdvancedSettings>
         {    
             if(!round.isEmpty())
             {
-                rounds.add(RoundCard(
-                key: ValueKey(round),
-                round: round,
-                roundNum: roundCount,
-                isDeletable:  true,
-                    onRemove: (){
-                    setState(() {intervalTimer.removeRound(round);});
-                    },
-                )
+                rounds.add(
+                  Column(
+                    children: [
+                      RoundCard(
+                                      key: ValueKey(round),
+                                      round: round,
+                                      roundNum: roundCount,
+                                      isDeletable:  true,
+                        onRemove: (){
+                        setState(() {intervalTimer.removeRound(round);});
+                        },
+                                      ),
+                        Padding(padding: EdgeInsets.all(10))
+                    ],
+                  )
                 );
                 roundCount++;
             } 
@@ -39,50 +45,62 @@ class _TimerAdvancedSettingState extends State<TimerAdvancedSettings>
     
     /// Display detailed controls for this [IntervalTimer] such as
     /// adding/removing [Rounds] and altering the their sets(currently called phaseTimers)
-    List<Widget> buildDisplay(IntervalTimer intervalTimer)
+    Container buildDisplay(IntervalTimer intervalTimer, Color backgroundColor)
     {
-        return [
-        Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        return Container(
+          color: backgroundColor,
+          child: Column(
             children: [
-            SizedBox(
-              width: 350,
-              child: ElevatedButton(
-                  onPressed: ((){
-                  setState(intervalTimer.addRound);
-                  }),
-                  child: Icon(Icons.add),
-              ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                SizedBox(
+                  width: 350,
+                  child: ElevatedButton(
+                      onPressed: ((){
+                      setState(intervalTimer.addRound);
+                      }),
+                      child: Icon(Icons.add),
+                  ),
+                ),
+                
+                ],
             ),
-            
-            ],
-        ),
-        Expanded(
-            child: ListView(
-            children: displayRounds(intervalTimer),
+            Flexible(
+                child: Container(
+                  width: 370,
+                  // color: Colors.blueGrey.shade500,
+                  child: Scrollbar(
+                    thumbVisibility: true,
+                    trackVisibility: true,
+                    thickness: 20,
+                    interactive: true,
+                    child: ListView(
+                      children: displayRounds(intervalTimer)
+
+                    ),
+                  ),
+              )
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(timeDisplay(intervalTimer.getTotalTime()),
+                style: TextStyle(fontSize: 30)),
+              ],
             )
-        ),
-        
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(timeDisplay(intervalTimer.getTotalTime()),
-            style: TextStyle(fontSize: 30)),
-          ],
-        )
-        ];
+            ]
+          )
+        );
     }
 
     @override
     Widget build(BuildContext context)
     {
         var intervalTimer = context.watch<IntervalTimer>();
-        return Container(
-          color: Theme.of(context).colorScheme.inversePrimary,
-          child: Column(
-              children: buildDisplay(intervalTimer)
-          ),
-        );
+        return buildDisplay(
+          intervalTimer, 
+          Theme.of(context).colorScheme.inversePrimary);
     }
 }
 
