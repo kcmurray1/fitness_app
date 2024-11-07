@@ -1,3 +1,4 @@
+import 'package:fitness_app/models/round.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fitness_app/models/interval_timer.dart';
@@ -11,38 +12,6 @@ class TimerAdvancedSettings extends StatefulWidget {
 
 class _TimerAdvancedSettingState extends State<TimerAdvancedSettings>
 {  
-    /// Display [IntervalTimer.rounds] as a list containing
-    /// editable [RoundCard]
-    List<Widget> displayRounds(IntervalTimer intervalTimer)
-    {
-        List<Widget> rounds = [];
-        int roundCount = 1;
-        for(var round in intervalTimer.rounds)
-        {    
-            if(!round.isEmpty())
-            {
-                rounds.add(
-                  Column(
-                    children: [
-                      RoundCard(
-                                      key: ValueKey(round),
-                                      round: round,
-                                      roundNum: roundCount,
-                                      isDeletable:  true,
-                        onRemove: (){
-                        setState(() {intervalTimer.removeRound(round);});
-                        },
-                                      ),
-                        Padding(padding: EdgeInsets.all(10))
-                    ],
-                  )
-                );
-                roundCount++;
-            } 
-        }
-        return rounds;
-    }
-    
     /// Display detailed controls for this [IntervalTimer] such as
     /// adding/removing [Rounds] and altering the their sets(currently called phaseTimers)
     Container buildDisplay(IntervalTimer intervalTimer, Color backgroundColor)
@@ -51,44 +20,55 @@ class _TimerAdvancedSettingState extends State<TimerAdvancedSettings>
           color: backgroundColor,
           child: Column(
             children: [
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                SizedBox(
-                  width: 350,
-                  child: ElevatedButton(
-                      onPressed: ((){
-                      setState(intervalTimer.addRound);
-                      }),
-                      child: Icon(Icons.add),
-                  ),
-                ),
-                
+                  Text(timeDisplay(intervalTimer.getTotalTime()),
+                  style: TextStyle(fontSize: 30)),
                 ],
-            ),
-            Flexible(
-                child: Container(
-                  width: 370,
-                  // color: Colors.blueGrey.shade500,
-                  child: Scrollbar(
-                    thumbVisibility: true,
-                    trackVisibility: true,
-                    thickness: 20,
-                    interactive: true,
-                    child: ListView(
-                      children: displayRounds(intervalTimer)
+              ),
+              Flexible(
+                  child: Container(
+                    width: 370,
+                    // color: Colors.blueGrey.shade500,
+                    child: Scrollbar(
+                      thumbVisibility: true,
+                      trackVisibility: true,
+                      thickness: 20,
+                      interactive: true,
+                      child: ListView.builder(
+                        itemCount: intervalTimer.rounds.length,
+                        itemBuilder:(context, index){ 
+                          Round round = intervalTimer.rounds[index];
+                            return RoundCard(
+                              key: ValueKey(round),
+                              round: round,
+                              roundNum: index + 1,
+                              // isDeletable: true,
+                              onRemove: (){
+                                intervalTimer.removeRound(round);
+                              },  
+                            );
+                        }
 
+                      ),
                     ),
-                  ),
-              )
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(timeDisplay(intervalTimer.getTotalTime()),
-                style: TextStyle(fontSize: 30)),
-              ],
-            )
+                )
+              ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                      width: 350,
+                      child: ElevatedButton(
+                        onPressed: ((){
+                        setState(intervalTimer.addRound);
+                        }),
+                        child: Icon(Icons.add),
+                      ),
+                    ),  
+                  ],
+                ),
             ]
           )
         );
