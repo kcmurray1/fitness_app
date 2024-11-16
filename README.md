@@ -42,9 +42,11 @@ Functionality Example:) '+': work time, '=': rest time
     - option to select rounds as pages (1-2, all, etc)
         - select sets within the round (odd, even, 1-2, etc.)
 **NOTE #4:** Improve UI
-	- Simple time settings
+	- Simple time settings [x]
 		- adding rounds adds default 
-	- Advanced time settings	
+	- Advanced time settings [x]
+		- make rounds into individual cards
+		- edit/delete rounds	
 	- Timer Page
 		- alternate colors between work and rest time
 		- Audio

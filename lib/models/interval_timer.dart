@@ -27,15 +27,49 @@ class IntervalTimer extends ChangeNotifier {
     _totalRounds = numRounds;
   }
   
-  void addRound({
-    Duration workTime = const Duration(seconds: 5),
-    Duration restTime = const Duration (seconds: 2)
+  void updateFromPreset({
+    required int newRoundCount,
+    required Duration newWorkTime,
+    required Duration newRestTime
   })
   {
-    Round newRound = Round(initWorkTime: workTime, initRestTime: restTime);
-    newRound.addListener(update);
+    // remove listeners
+    for(Round round in rounds)
+    {
+      round.removeListener(update);
+    }
+
+    // rebuild rounds
+    rounds.clear();
+    for(int i = 0; i < newRoundCount; i++)
+    {
+      addRound(workTime: newWorkTime, restTime: newRestTime);
+    }
+
+    _totalRounds = newRoundCount;
+  }
+  /// Add a [Round] to this [IntervalTimer] with an optional [workTime] and [restTime]
+  /// This will duplicate and add [Round] passed, otherwise creates a new [Round] 
+  void addRound({
+    Duration workTime = const Duration(seconds: 5),
+    Duration restTime = const Duration (seconds: 2),
+    Round? duplicateRound
+  })
+  {
+    Round newRound;
+    if(duplicateRound != null)
+    {
+      newRound = duplicateRound;
+    }
+    else
+    {
+      newRound = Round(initWorkTime: workTime, initRestTime: restTime);
+      newRound.addListener(update);
+    }
+    
     rounds.add(newRound);
     _totalRounds++;
+    // notifyListeners();
   }
 
   void removeRound(Round round)
@@ -105,10 +139,17 @@ class IntervalTimer extends ChangeNotifier {
     rounds[_roundIndex].start();
   }
 
-  String getRoundProgress()
+  Round get getCurrentRound
+  {
+    return rounds[_roundIndex];
+  }
+  /// Returns the place in the current [Round] in the format Completed/Remaining
+  /// A [Round] with three [PhaseTimer] will start at 1/3 then update to 2/3...3/3  
+  String get getRoundProgress
   {
     return rounds[_roundIndex].progress;
   }
+
   String getCurrentTime()
   {
     return rounds[_roundIndex].currentTime;
@@ -127,7 +168,7 @@ class IntervalTimer extends ChangeNotifier {
     {
       rounds[_roundIndex].stop();
       _roundIndex++;
-      round++;
+      round++;      
       startRound();
     }
     notifyListeners();

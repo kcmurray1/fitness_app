@@ -6,19 +6,20 @@ class RoundCardPopUpMenu extends StatelessWidget
 {
   final Function onDelete;
   final Function onEdit;
+  final Function onDuplicate;
   final double textSize;
 
   RoundCardPopUpMenu({
     super.key,
     required this.onDelete,
     required this.onEdit,
+    required this.onDuplicate,
     this.textSize = 20
   });
 
   @override
   Widget build(BuildContext context)
   {
-
     return PopupMenuButton<Option>(
       position: PopupMenuPosition.under,
       icon: Icon(Icons.more_vert),
@@ -28,9 +29,9 @@ class RoundCardPopUpMenu extends StatelessWidget
         PopupMenuItem<Option>
         (
           value: Option.edit,
-          onTap: (){
+          onTap: ((){
             onEdit();
-          },
+          }),
           child: Text(
             "Edit",
             style: TextStyle(
@@ -41,11 +42,24 @@ class RoundCardPopUpMenu extends StatelessWidget
         PopupMenuItem<Option>
         (
           value: Option.delete,
-          onTap: (){
+          onTap: ((){
             onDelete();
-          },
+          }),
           child: Text(
             "Delete",
+            style: TextStyle(
+              fontSize: textSize
+            )
+          )
+        ),
+        PopupMenuItem<Option>
+        (
+          value: Option.duplicate,
+          onTap: ((){
+            onDuplicate();
+          }),
+          child: Text(
+            "Duplicate",
             style: TextStyle(
               fontSize: textSize
             )

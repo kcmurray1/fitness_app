@@ -5,6 +5,7 @@ import 'package:fitness_app/pages/timer_page/widgets/time_display.dart';
 
 class TimerSimpleSettings extends StatefulWidget
 {
+
   @override
   State<TimerSimpleSettings> createState() => _TimerSimpleSettingState();
 }

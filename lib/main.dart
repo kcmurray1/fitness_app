@@ -4,14 +4,15 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:fitness_app/pages/timer_page/timer_page.dart';
 import 'package:fitness_app/models/interval_timer.dart';
+import 'package:fitness_app/pages/timer_select_page/timer_select_page.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 enum Page {
-  timer,
-  map
+  map,
+  timerSelection,
 }
 
 class MyApp extends StatelessWidget {
@@ -55,7 +56,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   
-  Page pageIndex = Page.timer;
+  Page pageIndex = Page.timerSelection;
   bool displayMenu = false;
   @override
   Widget build(BuildContext context) {
@@ -64,10 +65,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     switch(pageIndex)
     {
-      case Page.timer:
-        page = TimerPage();
+      // case Page.timer:
+      //   page = TimerPage();
       case Page.map:
         page = MapPage();
+      case Page.timerSelection:
+        page = TimerSelectPage();
       default:
         throw UnimplementedError("No widget for index $pageIndex");  
     }
@@ -116,17 +119,24 @@ class _MyHomePageState extends State<MyHomePage> {
                   backgroundColor: Theme.of(context).colorScheme.primaryFixedDim,
                   extended: constraints.maxWidth >= 400,
                   destinations: [
-                    NavigationRailDestination(
-                      icon: Icon(Icons.access_time_outlined), 
-                      label: Text(
-                        "Timer",
-                        style: TextStyle(fontSize: 20)
-                      ),
-                    ),
+                    // NavigationRailDestination(
+                    //   icon: Icon(Icons.access_time_outlined), 
+                    //   label: Text(
+                    //     "Timer",
+                    //     style: TextStyle(fontSize: 20)
+                    //   ),
+                    // ),
                     NavigationRailDestination(
                       icon: Icon(Icons.map), 
                       label: Text(
                         "Map",
+                        style: TextStyle(fontSize: 20),
+                      )
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.abc), 
+                      label: Text(
+                        "test",
                         style: TextStyle(fontSize: 20),
                       )
                     )

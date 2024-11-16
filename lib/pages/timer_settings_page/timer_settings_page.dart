@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 // Settings Widgets
 import 'package:fitness_app/pages/timer_settings_page/widgets/timer_advanced_settings.dart';
 import 'package:fitness_app/pages/timer_settings_page/widgets/timer_simple_settings.dart';
-
+import 'package:fitness_app/models/interval_timer.dart';
 
 class TimerSettingsPage extends StatefulWidget {
 
@@ -14,6 +14,13 @@ class _TimerSettingsPage extends State<TimerSettingsPage> {
   // defualt to simple timer
   bool _isSimpleTimer = true;
 
+  @override
+  void dispose()
+  {
+    print("TimerSettings dispose");
+    super.dispose();
+  }
+  
   @override
   Widget build(BuildContext context) {
     Color selectedButtonColor = Theme.of(context).colorScheme.surface;
@@ -60,6 +67,13 @@ class _TimerSettingsPage extends State<TimerSettingsPage> {
                   )
                 )
               ),
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  shape: CircleBorder()
+                ),
+                onPressed: (){}, 
+                child: Icon(Icons.help))
             ],
           )
       ),

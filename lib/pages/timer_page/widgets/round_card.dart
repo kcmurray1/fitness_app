@@ -6,25 +6,27 @@ import 'round_card_menu.dart';
 /// Display [PhaseTimers] in this [Round] <br>
 /// Provides functionality for adding and removing timers from this [Round]
 class RoundCard extends StatefulWidget {
-  final Round? round;
+  final Round round;
   final int? roundNum;
   final Function onRemove;
-  // final bool isDeletable;
+  final Function onDuplicate;
+
   RoundCard({
     super.key,
-    this.round, 
+    required this.round, 
     this.roundNum, 
-    // required this.isDeletable, 
-    required this.onRemove
+    required this.onRemove,
+    required this.onDuplicate
     });
 
   @override
-  State<RoundCard> createState() => _RoundCard();
+  State<RoundCard> createState() => _RoundCardState();
 }
 
-class _RoundCard extends State<RoundCard> {
+class _RoundCardState extends State<RoundCard> {
 
   bool _isEditable = false;
+  ExpansionTileController _expansionTileController = ExpansionTileController();
 
   // Displays round number and buttons to add/rmv
   Widget toggleRoundBar()
@@ -34,7 +36,7 @@ class _RoundCard extends State<RoundCard> {
       children: [
         ElevatedButton(
           onPressed: (){
-            setState(() {widget.round!.addTimer();});
+            setState(() {widget.round.addTimer();});
           },
           child: Icon(Icons.add)
         ),
@@ -49,7 +51,7 @@ class _RoundCard extends State<RoundCard> {
         ElevatedButton(
           onPressed: (){
             setState(() {
-              widget.round!.removePhaseTimer();
+              widget.round.removePhaseTimer();
             });
           },
           child: Icon(Icons.remove)
@@ -62,6 +64,7 @@ class _RoundCard extends State<RoundCard> {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
+      controller: _expansionTileController,
       title: Row(
         children: [
           Text(
@@ -78,12 +81,15 @@ class _RoundCard extends State<RoundCard> {
         onEdit: (){
           setState((){
             _isEditable = true;
+          
           });
+          if(!_expansionTileController.isExpanded)
+          {
+            _expansionTileController.expand();
+          }
         },
-        onDelete: (){
-          widget.onRemove();
-        },
-
+        onDelete: () => widget.onRemove(),
+        onDuplicate: () => widget.onDuplicate(),
       ),
       collapsedBackgroundColor: Theme.of(context).colorScheme.primary,
       backgroundColor: Theme.of(context).colorScheme.primary.withAlpha(150),
@@ -103,11 +109,11 @@ class _RoundCard extends State<RoundCard> {
                     child: ListView.builder(
                       shrinkWrap: true,
                       physics: ScrollPhysics(),
-                      itemCount: widget.round!.phaseTimers.length,
+                      itemCount: widget.round.phaseTimers.length,
                       itemBuilder: (context, index){
                         return Column(
                           children: [
-                            PhaseCard(timer: widget.round!.phaseTimers[index]),
+                            PhaseCard(timer: widget.round.phaseTimers[index]),
                           ],
                         );
                       },

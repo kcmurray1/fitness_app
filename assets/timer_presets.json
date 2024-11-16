@@ -1,0 +1,8 @@
+[
+    {"name": "default", "work": 60, "rest" : 30, "rounds" : 5},
+    
+    {"name": "climb", "work": 60, "rest" : 30, "rounds" : 5},
+
+    {"name": "Plank", "work": 180, "rest": 0, "rounds" : 2}
+
+]

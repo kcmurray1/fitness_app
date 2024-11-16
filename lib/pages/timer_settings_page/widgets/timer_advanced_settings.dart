@@ -44,10 +44,12 @@ class _TimerAdvancedSettingState extends State<TimerAdvancedSettings>
                               key: ValueKey(round),
                               round: round,
                               roundNum: index + 1,
-                              // isDeletable: true,
                               onRemove: (){
                                 intervalTimer.removeRound(round);
                               },  
+                              onDuplicate: (){
+                                intervalTimer.addRound(duplicateRound: round);
+                              },
                             );
                         }
 
@@ -61,9 +63,7 @@ class _TimerAdvancedSettingState extends State<TimerAdvancedSettings>
                     SizedBox(
                       width: 350,
                       child: ElevatedButton(
-                        onPressed: ((){
-                        setState(intervalTimer.addRound);
-                        }),
+                        onPressed: () => intervalTimer.addRound(),
                         child: Icon(Icons.add),
                       ),
                     ),  

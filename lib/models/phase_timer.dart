@@ -21,6 +21,10 @@ class PhaseTimer extends ChangeNotifier {
     setDuration(timeOn);
   }
 
+  bool get isWorkPhase
+  {
+    return _isWorkPhase;
+  }
   // The PhaseTimer is marked as complete after the
   // the work duration and rest duration have completed
   bool isComplete()
@@ -68,7 +72,7 @@ class PhaseTimer extends ChangeNotifier {
     isRunning = false;
   }
 
-  void _switchPhase()
+  void _switchPhase() async
   {
     _isWorkPhase = false;
     setDuration(_restTime);
@@ -85,8 +89,8 @@ class PhaseTimer extends ChangeNotifier {
     }
 
     isRunning = true;
-    _timer = Timer.periodic(const Duration(milliseconds: 10), (timer) {
-      if(duration.inMilliseconds == 0)
+    _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      if(duration.inMicroseconds == 0)
       {
         if(_isWorkPhase)
         {
@@ -100,7 +104,7 @@ class PhaseTimer extends ChangeNotifier {
       }
       else
       {
-        duration -= const Duration(milliseconds: 10);
+        duration -= const Duration(milliseconds: 100);
       }
       notifyListeners();
       
@@ -128,14 +132,14 @@ class PhaseTimer extends ChangeNotifier {
     int hours = duration.inHours;
     int minutes = duration.inMinutes.remainder(60);
     int seconds = duration.inSeconds.remainder(60);
-    int hundredths = (duration.inMilliseconds.remainder(1000) / 10).truncate();
+    int hundredths = (duration.inMilliseconds.remainder(1000) / 100).truncate();
 
     // Format as HH:MM:SS:XX (where XX is hundredths of a second)
     String formatted = 
         '${hours.toString().padLeft(1, '0')}:' // Hours (no padding for leading 0)
         '${minutes.toString().padLeft(2, '0')}:' // Minutes, padded to 2 digits
         '${seconds.toString().padLeft(2, '0')}.' // Seconds, padded to 2 digits
-        '${hundredths.toString().padLeft(2, '0')}'; // Hundredths, padded to 2 digits
+        '${hundredths.toString()}';
 
     return formatted;
   }

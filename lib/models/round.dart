@@ -21,6 +21,11 @@ class Round extends ChangeNotifier {
       addTimer();
     }
   }
+  
+  bool get isWorkPhase
+  {
+    return phaseTimers[_phaseTimerIndex].isWorkPhase;
+  }
 
   String get progress
   {
