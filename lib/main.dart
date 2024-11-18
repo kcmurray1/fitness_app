@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fitness_app/pages/map_page/map.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:fitness_app/pages/timer_page/timer_page.dart';
-import 'package:fitness_app/models/interval_timer.dart';
 import 'package:fitness_app/pages/timer_select_page/timer_select_page.dart';
 
 void main() {
@@ -21,9 +18,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => IntervalTimer(),
-      child: MaterialApp(
+    return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
           // This is the theme of your application.
@@ -31,8 +26,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: const MyHomePage(title: 'Timer Home Page'),
-      )
-    );
+      );
   }
 }
 

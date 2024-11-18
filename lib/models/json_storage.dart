@@ -26,16 +26,17 @@ class JsonStorage
   }
 
   /// Return read json content from storage
-  /// Returns [Null] if an error occured
+  /// Returns [defaultValue] if no content is read or
+  /// an error occurs while reading
   Future<dynamic> read() async
   {
     if(_cache != null)
     {
       return _cache;
     }
+ 
     try
     {
-      print("empty cache");
       final File file = await _localFile;
       final String content = await file.readAsString();
       _cache = jsonDecode(content);
@@ -43,9 +44,13 @@ class JsonStorage
     catch(e)
     {
       _cache = {};
-      _cache["default"] = defaultValue;
     }
 
+    if(_cache.isEmpty)
+    {
+      _cache["default"] = defaultValue;
+    }
+    print("read $_cache");
     return _cache;
   }
 
@@ -62,7 +67,7 @@ class JsonStorage
   
   dynamic clear()
   {
-    _cache.clear();
+    _cache!.clear();
     return _cache;
   }
 

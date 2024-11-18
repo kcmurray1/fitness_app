@@ -165,4 +165,9 @@ class PhaseTimer extends ChangeNotifier {
   {
     return "PhaseTimer(Work: ${_workTime} seconds, Rest: ${_restTime})";
   }
+
+  dynamic toJson()
+  {
+    return {"work": _workTime.inSeconds, "rest": _restTime.inSeconds};
+  }
 }

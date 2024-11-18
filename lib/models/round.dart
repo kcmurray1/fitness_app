@@ -152,4 +152,14 @@ class Round extends ChangeNotifier {
   {
     return "Round($phaseTimers)";
   }
+
+  dynamic toJson()
+  {
+    dynamic data = {};
+    for(int i = 0; i < phaseTimers.length; i++)
+    {
+      data["timer_$i"] = phaseTimers[i].toJson();
+    }
+    return data;
+  }
 }

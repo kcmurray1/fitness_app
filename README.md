@@ -17,11 +17,11 @@ TIMER
 		- display beacons for each mile and breakdown(pace, elevation, distance)
 **TODO**:
 1a): implement time off logic [x]
-	- give 1 second gap between timer switch.
-		-refactor Phasetimer to compose of both work and rest (hence a phase) [x]
-	- add rounds (increment) [x]
-		- currently does not work with more than 1 phaseTimer, it pauses between the transition [x]
-	- maybe add sound(beep) for the last 3 seconds 
+- give 1 second gap between timer switch. [X]: Timer uses microseconds instead of milliseconds 
+	-refactor Phasetimer to compose of both work and rest (hence a phase) [x]
+- add rounds (increment) [x]
+	- currently does not work with more than 1 phaseTimer, it pauses between the transition [x]
+- maybe add sound(beep) for the last 3 seconds 
 
 Functionality Example:) '+': work time, '=': rest time
     Rounds / Exercises(sets)
@@ -42,13 +42,18 @@ Functionality Example:) '+': work time, '=': rest time
     - option to select rounds as pages (1-2, all, etc)
         - select sets within the round (odd, even, 1-2, etc.)
 **NOTE #4:** Improve UI
-	- Simple time settings [x]
-		- adding rounds adds default 
-	- Advanced time settings [x]
-		- make rounds into individual cards
-		- edit/delete rounds	
-	- Timer Page
-		- alternate colors between work and rest time
-		- Audio
-			- ticking noise for the last 3-5 seconds
-		
+- Simple time settings [x]
+	- adding rounds adds default 
+- Advanced time settings [x]
+	- make rounds into individual cards
+	- edit/delete rounds	
+- Timer Page
+	- alternate colors between work and rest time [x]
+	- Audio
+		- ticking noise for the last 3-5 seconds
+**State Organization** [x]
+- remove use of changenotifierprovider in main.dart [x]
+- adjust build in timer_settings_page to use this instead to localize changes [x]
+- same applies to timer_page [x]
+- then figure out how to save changes to user_timers.json [x]
+	- data changes but have to refresh in ide to see changes. [x]

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'phase_timer.dart';
 import 'round.dart';
@@ -14,10 +16,13 @@ class IntervalTimer extends ChangeNotifier {
   List<Round> rounds = [];
   int _minimumTotalRounds = 1;
 
+  String id;
+
   IntervalTimer({
     Duration workTime = const Duration(seconds: 5), 
     Duration restTime = const Duration(seconds:  2), 
-    int numRounds = 2
+    int numRounds = 2,
+    this.id = "temp"
   })
   {
     for(int i = 0; i < numRounds; i++)
@@ -30,7 +35,8 @@ class IntervalTimer extends ChangeNotifier {
   void updateFromPreset({
     required int newRoundCount,
     required Duration newWorkTime,
-    required Duration newRestTime
+    required Duration newRestTime,
+    required String id,
   })
   {
     // remove listeners
@@ -45,7 +51,7 @@ class IntervalTimer extends ChangeNotifier {
     {
       addRound(workTime: newWorkTime, restTime: newRestTime);
     }
-
+    this.id = id;
     _totalRounds = newRoundCount;
   }
   /// Add a [Round] to this [IntervalTimer] with an optional [workTime] and [restTime]
@@ -206,6 +212,16 @@ class IntervalTimer extends ChangeNotifier {
   bool isComplete()
   {
     return round == _totalRounds && rounds[_roundIndex].isRoundComplete;
+  }
+
+  dynamic toJson()
+  {
+    dynamic roundData = {};
+    for(int i = 0; i < rounds.length; i++)
+    {
+      roundData["round_$i"] = rounds[i].toJson();
+    }
+    return jsonEncode({"id": id, "num_rounds": _totalRounds, "rounds" : roundData});
   }
 }
 

@@ -8,13 +8,15 @@ class RoundCardPopUpMenu extends StatelessWidget
   final Function onEdit;
   final Function onDuplicate;
   final double textSize;
+  final Color iconColor;
 
   RoundCardPopUpMenu({
     super.key,
     required this.onDelete,
     required this.onEdit,
     required this.onDuplicate,
-    this.textSize = 20
+    this.textSize = 20,
+    this.iconColor = Colors.white
   });
 
   @override
@@ -23,7 +25,7 @@ class RoundCardPopUpMenu extends StatelessWidget
     return PopupMenuButton<Option>(
       position: PopupMenuPosition.under,
       icon: Icon(Icons.more_vert),
-      iconColor: Colors.white,
+      iconColor: iconColor,
       iconSize: 30,
       itemBuilder: (BuildContext context) => <PopupMenuEntry<Option>> [
         PopupMenuItem<Option>

@@ -2,13 +2,17 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fitness_app/models/interval_timer.dart';
 import 'package:fitness_app/pages/timer_page/widgets/interval_timer_controls.dart';
-import 'package:fitness_app/pages/timer_settings_page/timer_settings_page.dart';
 
+/// Displays [IntervalTimer] for user to interact with the timer
 class TimerPage extends StatefulWidget
 {
   final IntervalTimer? timer;
-
+  
+  /// Creates [TimerPage] that listens to parent
+  /// Widget containing a [IntervalTimer] provider. <br>
+  /// This TimerPage will optionally listen to timer, if provided.
   TimerPage({
+    super.key,
     this.timer
   });
 
@@ -32,7 +36,7 @@ class _TimerPage extends State<TimerPage>
      
     }
   
-  Color idk(bool isWork, bool status)
+  Color _toggleBackgroundColor(bool isWork, bool status)
   {
     if(!status)
     {
@@ -51,52 +55,17 @@ class _TimerPage extends State<TimerPage>
     var intervalTimer = widget.timer ?? context.watch<IntervalTimer>();
     intervalTimer.removeEmptyRounds();
 
-    return
-        Scaffold(
-          backgroundColor: idk(intervalTimer.getCurrentRound.isWorkPhase, intervalTimer.isStarted),
-          body: Center(
-            // Center is a layout widget. It takes a single child and positions it
-            // in the middle of the parent.
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: buildContent(intervalTimer)
+    return Scaffold(
+            backgroundColor: _toggleBackgroundColor(intervalTimer.getCurrentRound.isWorkPhase, intervalTimer.isStarted),
+            body: Center(
+              // Center is a layout widget. It takes a single child and positions it
+              // in the middle of the parent.
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: buildContent(intervalTimer)
+              ),
             ),
-          ),
-        );
-    // return Stack(
-    //   children: [
-    //     Scaffold(
-    //       backgroundColor: idk(intervalTimer.getCurrentRound.isWorkPhase, intervalTimer.isStarted),
-    //       body: Center(
-    //         // Center is a layout widget. It takes a single child and positions it
-    //         // in the middle of the parent.
-    //         child: Column(
-    //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //           children: buildContent(intervalTimer)
-    //         ),
-    //       ),
-    //     ),
-    //     if(!intervalTimer.isStarted)
-    //     Positioned(
-    //       top: 0,
-    //       right:0,
-    //       child: ElevatedButton(
-    //             style: ElevatedButton.styleFrom(
-    //               shape: CircleBorder(),
-    //             ),
-    //             onPressed: () {
-    //               Navigator.of(context).push(
-    //                 MaterialPageRoute(
-    //                   builder: (context) => TimerSettingsPage(timer: widget.timer),
-    //                 ),
-    //               );
-    //             },
-    //             child: Icon(Icons.settings,
-    //             size: 40),
-    //         ),
-    //     ),
-    //   ],
-    // );
+          );
   }
 }
 
