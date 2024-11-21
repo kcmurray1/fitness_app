@@ -1,20 +1,19 @@
+import 'package:fitness_app/models/base_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // Settings Widgets
 import 'package:fitness_app/pages/timer_settings_page/widgets/timer_advanced_settings.dart';
 import 'package:fitness_app/pages/timer_settings_page/widgets/timer_simple_settings.dart';
 import 'package:fitness_app/models/interval_timer.dart';
-import 'package:fitness_app/models/json_storage.dart';
-
+import 'package:fitness_app/models/base_timer.dart';
 
 class TimerSettingsPage extends StatefulWidget {
   final IntervalTimer? timer;
-  final JsonStorage storage;
+  // final BaseIntervalTimer? timer;
 
   TimerSettingsPage({
     super.key,
-    required this.storage,
-    this.timer 
+    this.timer,
   });
   
 
@@ -26,7 +25,6 @@ class _TimerSettingsPage extends State<TimerSettingsPage> {
   // defualt to simple timer
   bool _isSimpleTimer = true;
   
-  
   @override
   Widget build(BuildContext context) {
     Color selectedButtonColor = Theme.of(context).colorScheme.surface;
@@ -36,10 +34,7 @@ class _TimerSettingsPage extends State<TimerSettingsPage> {
           appBar: AppBar(
             leading: TextButton(
               onPressed: (){
-                // FIXME: add option if user wants to save changes
-                // This will determine whether to return true or false
-                widget.storage.save();
-                Navigator.of(context).pop(true);
+                Navigator.of(context).pop({"result": true, "save_data": true});
               },
               child: Icon(Icons.arrow_back, color: Colors.black)
             ),
@@ -92,7 +87,7 @@ class _TimerSettingsPage extends State<TimerSettingsPage> {
                 ],
               )
           ),
-          body: _isSimpleTimer ? TimerSimpleSettings(storage: widget.storage) : TimerAdvancedSettings()
+          body: _isSimpleTimer ? TimerSimpleSettings() : TimerAdvancedSettings()
         );
   
   }

@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
 import 'phase_timer.dart';
 import 'round.dart';
+import 'base_timer.dart';
 
-/// Creates a
-/// 
-/// awd 
-class IntervalTimer extends ChangeNotifier {
+
+
+class ComplexIntervalTimer extends BaseIntervalTimer {
   int _totalRounds = 1;
   int round = 1;
   List<PhaseTimer> phaseTimers = [];
@@ -16,12 +15,12 @@ class IntervalTimer extends ChangeNotifier {
 
   String id;
 
-  IntervalTimer({
+  ComplexIntervalTimer({
     Duration workTime = const Duration(seconds: 5), 
     Duration restTime = const Duration(seconds:  2), 
     int numRounds = 2,
     this.id = "temp"
-  })
+  }) : super(defaultRestTime: restTime, defaultWorkTime: workTime)
   {
     for(int i = 0; i < numRounds; i++)
     {
@@ -133,7 +132,8 @@ class IntervalTimer extends ChangeNotifier {
     return totalTime;
   }
   // Start the current round
-  void startRound()
+  @override
+  void start()
   {
     if(isRunning())
     {
@@ -165,6 +165,7 @@ class IntervalTimer extends ChangeNotifier {
   }
 
   //Update the display
+  @override
   void update()
   {
     // Move to next round
@@ -173,13 +174,14 @@ class IntervalTimer extends ChangeNotifier {
       rounds[_roundIndex].stop();
       _roundIndex++;
       round++;      
-      startRound();
+      start();
     }
     notifyListeners();
   }
 
   // Reset entire IntervalTimer
-  void _reset()
+  @override
+  void reset()
   {
     _roundIndex = 0;
     round = 1;
@@ -192,13 +194,14 @@ class IntervalTimer extends ChangeNotifier {
   }
 
   // Stop the current Round or reset the entire IntervalTimer
-  void stop({bool reset = true})
+  @override
+  void stop({bool resetTimer = true})
   {
-    if(reset)
+    if(resetTimer)
     {
-      _reset();
+      reset();
     }
-    rounds[_roundIndex].stop(resetRound: reset);
+    rounds[_roundIndex].stop(resetRound: resetTimer);
     notifyListeners();
   }
 
@@ -212,6 +215,7 @@ class IntervalTimer extends ChangeNotifier {
     return round == _totalRounds && rounds[_roundIndex].isRoundComplete;
   }
 
+  @override
   dynamic toJson()
   {
     dynamic roundData = {};

@@ -128,9 +128,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       )
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.abc), 
+                      icon: Icon(Icons.timer), 
                       label: Text(
-                        "test",
+                        "timer",
                         style: TextStyle(fontSize: 20),
                       )
                     )

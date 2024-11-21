@@ -1,14 +1,12 @@
-import 'package:fitness_app/models/json_storage.dart';
+import 'package:fitness_app/models/base_timer.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fitness_app/models/interval_timer.dart';
 import 'package:fitness_app/pages/timer_page/widgets/time_display.dart';
+import 'package:fitness_app/models/complex_interval_timer.dart';
 
 class TimerSimpleSettings extends StatefulWidget
 {
-  final JsonStorage storage;
-  TimerSimpleSettings({required this.storage});
-
   @override
   State<TimerSimpleSettings> createState() => _TimerSimpleSettingState();
 }
@@ -29,13 +27,11 @@ class _TimerSimpleSettingState extends State<TimerSimpleSettings>
               onRemove: (){
                 setState(() {
                   intervalTimer.removeLastRound();
-                  widget.storage[intervalTimer.id]["num_rounds"]--;
                 });
               }, 
               onAdd: (){
                 setState(() {
                   intervalTimer.addRound();
-                  widget.storage[intervalTimer.id]["num_rounds"]++;
                 });
               }, 
               child: Text("${intervalTimer.rounds.length}",

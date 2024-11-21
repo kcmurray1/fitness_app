@@ -33,14 +33,14 @@ Functionality Example:) '+': work time, '=': rest time
        + 7, =20 // allow individual adjustment of time(s)
 
 **NOTE #1:** Specify sets in a round [x]
-    - make round card
-    - addSet() adds a timer
-    - removeSet() removes a timer
+- make round card
+- addSet() adds a timer
+- removeSet() removes a timer
 **NOTE #2** [x]
-	- removing rounds removes the round at the end of the list and not the round that we want to remove 
+- removing rounds removes the round at the end of the list and not the round that we want to remove 
 **NOTE #3:**
-    - option to select rounds as pages (1-2, all, etc)
-        - select sets within the round (odd, even, 1-2, etc.)
+- option to select rounds as pages (1-2, all, etc)
+    - select sets within the round (odd, even, 1-2, etc.)
 **NOTE #4:** Improve UI
 - Simple time settings [x]
 	- adding rounds adds default 

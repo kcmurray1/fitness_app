@@ -103,7 +103,7 @@ class Round extends ChangeNotifier {
     notifyListeners();
   }
  
-  bool _isValidTimerIndex()
+  bool isValidTimerIndex()
   {
     return _phaseTimerIndex < phaseTimers.length - 1;
   }
@@ -114,7 +114,7 @@ class Round extends ChangeNotifier {
   void update()
   {
     // Attempt to move to the next PhaseTimer in this round 
-    if(_isValidTimerIndex() && phaseTimers[_phaseTimerIndex].isComplete())
+    if(isValidTimerIndex() && phaseTimers[_phaseTimerIndex].isComplete())
     {
       phaseTimers[_phaseTimerIndex].stop();
       _phaseTimerIndex++;
@@ -125,7 +125,7 @@ class Round extends ChangeNotifier {
   }
 
   // Reset entire IntervalTimer
-  void _reset()
+  void reset()
   {
     _phaseTimerIndex = 0;
     isStarted = false;
@@ -137,13 +137,13 @@ class Round extends ChangeNotifier {
   }
 
   // Stop the current PhaseTimer or reset the entire Round
-  void stop({bool reset = true})
+  void stop({bool resetRound = true})
   {
-    if(reset)
+    if(resetRound)
     {
-      _reset();
+      reset();
     }
-    phaseTimers[_phaseTimerIndex].stop(reset: reset);
+    phaseTimers[_phaseTimerIndex].stop(reset: resetRound);
     notifyListeners();
   }
 
