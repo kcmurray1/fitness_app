@@ -132,7 +132,7 @@ class _TimerSimpleSettingState extends State<TimerSimpleSettings>
             )
           ),
           Padding(padding: EdgeInsets.all(_paddingBetweenItems)),
-          Text("Total time: ${timeDisplay(intervalTimer.getTotalTime())}",
+          Text("Total time: ${timeDisplay(intervalTimer.totalTime)}",
           style: TextStyle(fontSize: _fontSize))
       
           ],

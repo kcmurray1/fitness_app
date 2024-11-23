@@ -44,7 +44,6 @@ class _TimerSelectPageState extends State<TimerSelectPage>
   void _loadPresetData()
   {
     _timerStorage.read().then((value){
-      print("read from file $value");
       setState(() {
         presetData = value;
       }); 
@@ -67,7 +66,7 @@ class _TimerSelectPageState extends State<TimerSelectPage>
   {
     // total time is work + rest * number of rounds NOTE: this only applies to simple timers
     IntervalTimer timer = IntervalTimer(id: id, workTime: work, restTime: rest, numRounds: rounds); 
-    Duration totalTime = timer.getTotalTime();
+    Duration totalTime = timer.totalTime;
     // Duration totalTime = Duration(seconds: ((work + rest) * rounds).inSeconds);
     return Container(
       decoration: BoxDecoration(
@@ -139,6 +138,85 @@ class _TimerSelectPageState extends State<TimerSelectPage>
       )
     );
   }
+  Widget customCardTwo ({
+    required IntervalTimer timer,
+    required Function onDelete
+  })
+  {
+    
+    // Duration totalTime = Duration(seconds: ((work + rest) * rounds).inSeconds);
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(width: 5, color: Colors.grey),
+        color: Colors.white
+      ),
+      padding: EdgeInsets.all(10),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(timer.name,
+                style: TextStyle(fontWeight: FontWeight.bold)
+              ),
+              Text(durationString(timer.totalTime))
+            ]
+          ),
+          Text("ROUNDS: ${timer.totalRounds}"),
+          Text("Work: "),
+          Text("Rest: "),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton.icon(onPressed: (){
+                
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ChangeNotifierProvider(
+                        create: (context) => timer,
+                        child: TimerPage(),
+                      )
+                    ),
+                  );
+
+              }, label: Text("Start"), icon: Icon(Icons.play_arrow)),
+              RoundCardPopUpMenu(
+                iconColor: Colors.blue,
+                onDelete: onDelete,
+                onEdit: () async {
+                  IntervalTimer settingsTimer = timer;
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ChangeNotifierProvider(
+                        create: (context) => settingsTimer,
+                        child: TimerSettingsPage(),
+                      )
+                    ),
+                  ).then((onValue) {
+                    if(onValue["save_data"])
+                    {
+                      // Update data
+                      setState(() {
+                        _timerStorage[timer.id] = settingsTimer.toJson();  
+                      });
+                      
+                      _timerStorage.save();
+                      // print(settingsTimer.toJson());
+                      // Reload data to show changes
+                      _loadPresetData();
+                      
+                    }
+                  });
+                  
+                },
+                onDuplicate: (){}
+              )
+            ],
+          ),
+        ],
+      )
+    );
+  }
 
   /// Add default timer
   void _addTimer()
@@ -182,23 +260,30 @@ class _TimerSelectPageState extends State<TimerSelectPage>
   {
     if(presetData == null)
     {
-      return Text("nop");
+      return Text("Loading data...");
     }
     else
     {
       return ListView(
         children:
           presetData.entries.map<Widget>((entry){
+
             String id = entry.key;
             dynamic preset = entry.value;
-            return customCard(
-              name:"no_name",
-              id: id,
-              work: Duration(seconds: preset["work"]),
-              rest: Duration(seconds: preset["rest"]),
-              rounds: preset["num_rounds"],
-              onDelete: ()=> _removeData(id),
-              );
+            return customCardTwo(timer: IntervalTimer.fromJson(
+                id: id,
+                jsonData: preset
+              ), 
+              onDelete: () => _removeData(id),
+            );
+            // return customCard(
+            //   name: preset["name"],
+            //   id: id,
+            //   work: Duration(seconds: preset["work"]),
+            //   rest: Duration(seconds: preset["rest"]),
+            //   rounds: preset["num_rounds"],
+            //   onDelete: ()=> _removeData(id),
+            //   );
           }).toList()
       );
     }

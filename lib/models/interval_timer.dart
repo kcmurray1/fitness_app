@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'phase_timer.dart';
 import 'round.dart';
@@ -31,6 +34,21 @@ class IntervalTimer extends ChangeNotifier {
       addRound(workTime: workTime, restTime: restTime);
     }
     _totalRounds = numRounds;
+  }
+
+  factory IntervalTimer.fromJson({
+    Key? key,
+    String id = "missing_id",
+    required dynamic jsonData,
+  }){
+
+    return IntervalTimer(
+      name: jsonData["name"],
+      id: id,
+      numRounds: jsonData["num_rounds"],
+      workTime: Duration(seconds: jsonData["work"] ?? 10),
+      restTime: Duration(seconds: jsonData["rest"] ?? 5),
+    );
   }
 
 
@@ -129,8 +147,12 @@ class IntervalTimer extends ChangeNotifier {
     }
     
   }
+  int get totalRounds
+  {
+    return _totalRounds;
+  }
 
-  Duration getTotalTime()
+  Duration get totalTime
   {
     Duration totalTime = Duration();
     for(Round round in rounds)

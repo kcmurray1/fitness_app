@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 // Settings Widgets
 import 'package:fitness_app/pages/timer_settings_page/widgets/timer_advanced_settings.dart';
 import 'package:fitness_app/pages/timer_settings_page/widgets/timer_simple_settings.dart';

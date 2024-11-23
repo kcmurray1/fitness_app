@@ -50,7 +50,7 @@ class JsonStorage
     {
       _cache["default"] = defaultValue;
     }
-    print("read $_cache");
+    print("JsonStorage read $_cache");
     return _cache;
   }
 

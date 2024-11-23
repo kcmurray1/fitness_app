@@ -23,7 +23,7 @@ class _TimerAdvancedSettingState extends State<TimerAdvancedSettings>
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(timeDisplay(intervalTimer.getTotalTime()),
+                  Text(timeDisplay(intervalTimer.totalTime),
                   style: TextStyle(fontSize: 30)),
                 ],
               ),
