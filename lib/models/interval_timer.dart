@@ -13,14 +13,17 @@ class IntervalTimer extends ChangeNotifier {
   int _roundIndex = 0;
   List<Round> rounds = [];
   int _minimumTotalRounds = 1;
+  bool isSimple = false;
 
   String id;
+  String name;
 
   IntervalTimer({
     Duration workTime = const Duration(seconds: 5), 
     Duration restTime = const Duration(seconds:  2), 
     int numRounds = 2,
-    this.id = "temp"
+    this.id = "temp",
+    this.name = "no_name"
   })
   {
     for(int i = 0; i < numRounds; i++)
@@ -29,6 +32,8 @@ class IntervalTimer extends ChangeNotifier {
     }
     _totalRounds = numRounds;
   }
+
+
   
   void updateFromPreset({
     required int newRoundCount,
@@ -76,6 +81,9 @@ class IntervalTimer extends ChangeNotifier {
     // notifyListeners();
   }
 
+  /// Removes specified [round]. <br> 
+  /// Does nothing if the [_totalRounds] are equal to [_minimumTotalRounds]. <br>
+  /// [_minimumtotalRounds] = 1 by default
   void removeRound(Round round)
   {
     if(_totalRounds == _minimumTotalRounds)
@@ -86,6 +94,9 @@ class IntervalTimer extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Removes last [round]. <br> 
+  /// Does nothing if the [_totalRounds] are equal to [_minimumTotalRounds]. <br>
+  /// [_minimumtotalRounds] = 1 by default
   void removeLastRound()
   {
     if(rounds.length == _minimumTotalRounds)
@@ -212,14 +223,25 @@ class IntervalTimer extends ChangeNotifier {
     return round == _totalRounds && rounds[_roundIndex].isRoundComplete;
   }
 
+  /// Sets all Rounds to contain a single Phasetimer with uniform
+  /// Work and Rest times <br>
+  void simplify()
+  {
+    for(Round round in rounds)
+    {
+      round.phaseTimers = [round.phaseTimers[0]];
+    }
+    notifyListeners();
+  }
+
   dynamic toJson()
   {
     dynamic roundData = {};
     for(int i = 0; i < rounds.length; i++)
     {
-      roundData["round_$i"] = rounds[i].toJson();
+      roundData["round_${i+1}"] = rounds[i].toJson();
     }
-    return {"id": id, "num_rounds": _totalRounds, "rounds" : roundData};
+    return {"id": id, "name": name, "timer_type": isSimple ? "simple" : "advanced", "num_rounds": _totalRounds, "rounds" : roundData};
   }
 }
 

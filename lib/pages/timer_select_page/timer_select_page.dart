@@ -68,7 +68,6 @@ class _TimerSelectPageState extends State<TimerSelectPage>
     // total time is work + rest * number of rounds NOTE: this only applies to simple timers
     IntervalTimer timer = IntervalTimer(id: id, workTime: work, restTime: rest, numRounds: rounds); 
     Duration totalTime = timer.getTotalTime();
-    print(totalTime);
     // Duration totalTime = Duration(seconds: ((work + rest) * rounds).inSeconds);
     return Container(
       decoration: BoxDecoration(
@@ -110,26 +109,27 @@ class _TimerSelectPageState extends State<TimerSelectPage>
                 onDelete: onDelete,
                 onEdit: () async {
                   IntervalTimer settingsTimer = IntervalTimer(id: id, workTime: work, restTime: rest, numRounds: rounds);
-                  dynamic settingsChanged = await Navigator.of(context).push(
+                  await Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => ChangeNotifierProvider(
                         create: (context) => settingsTimer,
                         child: TimerSettingsPage(),
                       )
                     ),
-                  );
-
-                  if(settingsChanged["save_data"])
-                  {
-                    // Update data
-                    // setState(() {
-                    //   _timerStorage[id] = settingsTimer.toJson();  
-                    // });
-                    print(settingsTimer.toJson());
-                    // Reload data to show changes
-                    _loadPresetData();
-                    
-                  }
+                  ).then((onValue) {
+                    if(onValue["save_data"])
+                    {
+                      // Update data
+                      // setState(() {
+                      //   _timerStorage[id] = settingsTimer.toJson();  
+                      // });
+                      print(settingsTimer.toJson());
+                      // Reload data to show changes
+                      _loadPresetData();
+                      
+                    }
+                  });
+                  
                 },
                 onDuplicate: (){}
               )
@@ -231,7 +231,7 @@ class _TimerSelectPageState extends State<TimerSelectPage>
       floatingActionButton: ElevatedButton(onPressed: () {
         _addTimer();
       }, 
-      child: Icon(Icons.add_a_photo)),
+      child: Icon(Icons.add_alarm)),
     );
   }
 
