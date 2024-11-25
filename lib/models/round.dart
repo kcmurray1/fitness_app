@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'phase_timer.dart';
 
@@ -12,16 +13,37 @@ class Round extends ChangeNotifier {
   final Duration initRestTime;
   
   Round({
-    this.initWorkTime = const Duration(seconds: -5),
-    this.initRestTime = const Duration(seconds:  -2)
+    this.initWorkTime = const Duration(seconds: 1),
+    this.initRestTime = const Duration(seconds: 1),
+    bool defaultInit = true
   })
   {
+    if(!defaultInit)
+    {
+      return;
+    }
+
     for(int i = 0; i < _defaultSets; i++)
     {
       addTimer();
     }
   }
-  
+
+  factory Round.fromList({
+    required List<dynamic> data,
+  })
+  {
+    Round newRound = Round(defaultInit: false);
+    
+    for(dynamic timerData in data)
+    {
+      Duration workTime = Duration(seconds: timerData["work"]);
+      Duration restTime = Duration(seconds: timerData["rest"]);
+      newRound.addTimer(workTime: workTime, restTime: restTime);
+    }
+    return newRound;
+  }
+
   bool get isWorkPhase
   {
     return phaseTimers[_phaseTimerIndex].isWorkPhase;
@@ -52,9 +74,9 @@ class Round extends ChangeNotifier {
     return _phaseTimerIndex == phaseTimers.length - 1 && phaseTimers[_phaseTimerIndex].isComplete();
   }
 
-  void addTimer()
+  void addTimer({Duration? workTime, Duration? restTime})
   {
-    PhaseTimer newTimer = PhaseTimer(timeOn: initWorkTime, timeOff: initRestTime);
+    PhaseTimer newTimer = PhaseTimer(timeOn: workTime ?? initWorkTime, timeOff: restTime ?? initRestTime);
     newTimer.addListener(update);
     phaseTimers.add(newTimer);
     notifyListeners();

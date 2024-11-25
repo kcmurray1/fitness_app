@@ -168,12 +168,11 @@ class _TimerSelectPageState extends State<TimerSelectPage>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TextButton.icon(onPressed: (){
-                
+              TextButton.icon(onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => ChangeNotifierProvider(
-                        create: (context) => timer,
+                        create: (context) => IntervalTimer.fromJson(jsonData: timer.toJson()),
                         child: TimerPage(),
                       )
                     ),

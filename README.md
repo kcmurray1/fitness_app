@@ -32,16 +32,16 @@ Functionality Example:) '+': work time, '=': rest time
     3: + 7, =10 // Decrease work by 1/2 
        + 7, =20 // allow individual adjustment of time(s)
 
-**NOTE #1:** Specify sets in a round [x]
+**TODO #1:** Specify sets in a round [x]
 - make round card
 - addSet() adds a timer
 - removeSet() removes a timer
-**NOTE #2** [x]
+**TODO #2** [x]
 - removing rounds removes the round at the end of the list and not the round that we want to remove 
-**NOTE #3:**
+**TODO #3:**
 - option to select rounds as pages (1-2, all, etc)
     - select sets within the round (odd, even, 1-2, etc.)
-**NOTE #4:** Improve UI
+**TODO #4:** Improve UI
 - Simple time settings [x]
 	- adding rounds adds default 
 - Advanced time settings [x]
@@ -51,6 +51,22 @@ Functionality Example:) '+': work time, '=': rest time
 	- alternate colors between work and rest time [x]
 	- Audio
 		- ticking noise for the last 3-5 seconds
+**TODO #5**
+- Timer Page
+	- Adjust timer_page so that leaving will stop the timer, currently, leaving the page while running will cause a dispose exception
+- SettingsPage
+	- Add IntervalTimer name field
+	- update Advanced settings page to remove empty rounds from the page(refer to timer_page use of removeEmptyRounds())
+- SelectorPage
+	- Update UI
+		- Build widget for Quickstart
+		- hide clear all button(keep for debug purposes)
+		- Determine how to display work and rest information for timers
+- GeneralSettingsPage
+	- Replace map page with settings page
+	- option to select time on/off color
+
+
 **State Organization** [x]
 - remove use of changenotifierprovider in main.dart [x]
 - adjust build in timer_settings_page to use this instead to localize changes [x]

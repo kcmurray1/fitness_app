@@ -9,7 +9,7 @@ import 'round.dart';
 /// 
 /// awd 
 class IntervalTimer extends ChangeNotifier {
-  int _totalRounds = 1;
+  int _totalRounds = 0;
   int round = 1;
   List<PhaseTimer> phaseTimers = [];
   bool isStarted = false;
@@ -26,9 +26,14 @@ class IntervalTimer extends ChangeNotifier {
     Duration restTime = const Duration(seconds:  2), 
     int numRounds = 2,
     this.id = "temp",
-    this.name = "no_name"
+    this.name = "no_name",
+    bool createEmpty = false
   })
   {
+    if(createEmpty)
+    {
+      return;
+    }
     for(int i = 0; i < numRounds; i++)
     {
       addRound(workTime: workTime, restTime: restTime);
@@ -36,19 +41,30 @@ class IntervalTimer extends ChangeNotifier {
     _totalRounds = numRounds;
   }
 
+
   factory IntervalTimer.fromJson({
     Key? key,
     String id = "missing_id",
     required dynamic jsonData,
   }){
-
-    return IntervalTimer(
-      name: jsonData["name"],
+    IntervalTimer newTimer = IntervalTimer(
+       name: jsonData["name"],
       id: id,
       numRounds: jsonData["num_rounds"],
       workTime: Duration(seconds: jsonData["work"] ?? 10),
       restTime: Duration(seconds: jsonData["rest"] ?? 5),
+      createEmpty: true
     );
+
+    if(jsonData["rounds"] != null)
+    {
+      jsonData["rounds"].entries.map((round) {
+        newTimer.addRound(duplicateRound: Round.fromList(data: round.value));
+      }).toList();
+    }
+
+    return newTimer;
+
   }
 
 
@@ -87,13 +103,13 @@ class IntervalTimer extends ChangeNotifier {
     if(duplicateRound != null)
     {
       newRound = duplicateRound;
+      newRound.addListener(update);
     }
     else
     {
       newRound = Round(initWorkTime: workTime, initRestTime: restTime);
       newRound.addListener(update);
     }
-    
     rounds.add(newRound);
     _totalRounds++;
     // notifyListeners();
@@ -174,6 +190,7 @@ class IntervalTimer extends ChangeNotifier {
     }
     isStarted = true;
     rounds[_roundIndex].start();
+    notifyListeners();
   }
 
   Round get getCurrentRound
