@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 enum Option {edit, delete, duplicate}
 
-class RoundCardPopUpMenu extends StatelessWidget
+/// Custom menu widget used to edit, delete and duplicate items
+class CustomPopUpMenu extends StatelessWidget
 {
   final Function onDelete;
   final Function onEdit;
@@ -10,7 +11,7 @@ class RoundCardPopUpMenu extends StatelessWidget
   final double textSize;
   final Color iconColor;
 
-  RoundCardPopUpMenu({
+  CustomPopUpMenu({
     super.key,
     required this.onDelete,
     required this.onEdit,

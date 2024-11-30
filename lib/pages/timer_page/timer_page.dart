@@ -1,6 +1,6 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:fitness_app/models/interval_timer.dart';
+import 'package:fitness_app/utilities/interval_timer.dart';
 
 /// Displays [IntervalTimer] for user to interact with the timer
 class TimerPage extends StatefulWidget
@@ -24,16 +24,6 @@ class _TimerPage extends State<TimerPage>
   Color restColor = Color.fromARGB(175, 226, 86, 86);
   Color workColor = Color.fromARGB(207, 125, 220, 91);
 
-
-  List<Widget> buildContent(IntervalTimer intervalTimer)
-    {
-      return [
-
-          buildTimerDisplay(intervalTimer), 
-          buildButton(intervalTimer, context),
-        ];
-     
-    }
   
   Color _toggleBackgroundColor(bool isWork, bool status)
   {
@@ -50,7 +40,7 @@ class _TimerPage extends State<TimerPage>
 
     /// Create Start, Pause, Restart, and Cancel buttons based on the
   /// state of this [IntervalTimer]
-  Widget buildButton(IntervalTimer timer, BuildContext context)
+  Widget buildTimerControl(IntervalTimer timer, BuildContext context)
   {
     // Display start button
     if (!timer.isStarted)
@@ -61,6 +51,7 @@ class _TimerPage extends State<TimerPage>
         width: 300,
         height: 70,
         fontSize: 30,
+        onHold: (){},
         onPressed: ()
         {
           timer.startRound();
@@ -79,6 +70,7 @@ class _TimerPage extends State<TimerPage>
             buildCustomButton(
               text: timer.isRunning() ? "pause" : "resume",
               context: context,
+              onHold: (){},
               onPressed: ()
               {
                 if (timer.isRunning())
@@ -92,16 +84,6 @@ class _TimerPage extends State<TimerPage>
                 
               },
             ),
-          // Display cancel button during the countdown
-          // Display restart button when IntervalTimer is comeplete
-          buildCustomButton(
-            text: timer.isRunning() ? "cancel" : "restart",
-            context: context,
-            onPressed: ()
-            {
-              timer.stop();
-            }, 
-          ),
         ]
       ); 
     }
@@ -111,6 +93,7 @@ class _TimerPage extends State<TimerPage>
   Widget buildCustomButton({
     required String text,
     required VoidCallback onPressed,
+    required VoidCallback onHold,
     required BuildContext context,
     double width = 180,
     double height = 65,
@@ -123,6 +106,7 @@ class _TimerPage extends State<TimerPage>
       height: height,
       child: ElevatedButton(
         onPressed: onPressed,
+        onLongPress: onHold,
         style: ElevatedButton.styleFrom(
           backgroundColor: color ?? Theme.of(context).colorScheme.primary
           ),
@@ -138,52 +122,71 @@ class _TimerPage extends State<TimerPage>
 
   }
 
+
+  
+  Widget buildTimerDisplay(IntervalTimer intervalTimer)
+  {
+    return  Column(
+                children: [
+                  Text(
+                    "Round: ${intervalTimer.round}",
+                    style: TextStyle(
+                      fontSize: 80,
+                      fontWeight: FontWeight.bold
+                    )
+                  ),
+                  Text(
+                    intervalTimer.getRoundProgress,
+                    style: TextStyle(
+                      fontSize: 60,
+                      fontWeight: FontWeight.bold
+                    )
+                  ),
+                  Padding(padding: EdgeInsets.all(25)),
+                  Text(
+                    intervalTimer.getCurrentTime(),
+                    style: TextStyle(fontSize: 100, fontWeight: FontWeight.bold)
+                    ),
+                    
+                ],
+              );
+  }
+
   @override
   Widget build(BuildContext context)
   {
     var intervalTimer = widget.timer ?? context.watch<IntervalTimer>();
     intervalTimer.removeEmptyRounds();
 
-    return Scaffold(
-            backgroundColor: _toggleBackgroundColor(intervalTimer.getCurrentRound.isWorkPhase, intervalTimer.isStarted),
-            body: Center(
-              // Center is a layout widget. It takes a single child and positions it
-              // in the middle of the parent.
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: buildContent(intervalTimer)
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult:(didPop, result){},
+      child: Scaffold(
+              backgroundColor: _toggleBackgroundColor(intervalTimer.getCurrentRound.isWorkPhase, intervalTimer.isStarted),
+              body: Center(
+                // Center is a layout widget. It takes a single child and positions it
+                // in the middle of the parent.
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children:  [
+                    buildCustomButton(
+                      text: "HOLD TO EXIT",
+                      context: context,
+                      onPressed: (){},
+                      onHold: ()
+                      {
+                        intervalTimer.stop();
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    buildTimerDisplay(intervalTimer), 
+                    buildTimerControl(intervalTimer, context)
+                  ]
+                ),
               ),
             ),
-          );
+    );
   }
 }
 
 
-Widget buildTimerDisplay(IntervalTimer intervalTimer)
-{
-  return  Column(
-              children: [
-                Text(
-                  "Round: ${intervalTimer.round}",
-                  style: TextStyle(
-                    fontSize: 45,
-                    fontWeight: FontWeight.bold
-                  )
-                ),
-                Text(
-                  intervalTimer.getRoundProgress,
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold
-                  )
-                ),
-
-                Text(
-                  intervalTimer.getCurrentTime(),
-                  style: TextStyle(fontSize: 75),
-                  // style: Theme.of(context).textTheme.headlineMedium,
-                ),
-                  
-              ],
-            );
-}

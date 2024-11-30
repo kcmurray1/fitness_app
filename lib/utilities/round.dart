@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'phase_timer.dart';
 
 class Round extends ChangeNotifier {
-  // NOTE: maybe rename phaseTimers to sets?
   // store the phaseTimers
   List<PhaseTimer> phaseTimers = [];
   int _phaseTimerIndex = 0;
@@ -100,7 +99,7 @@ class Round extends ChangeNotifier {
 
   bool isEmpty()
   {
-    return phaseTimers != Null && phaseTimers.isEmpty;
+    return phaseTimers.isEmpty;
   }
 
   void removePhaseTimer({int index = 0})

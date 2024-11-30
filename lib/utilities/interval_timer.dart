@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'phase_timer.dart';
@@ -17,6 +15,8 @@ class IntervalTimer extends ChangeNotifier {
   List<Round> rounds = [];
   int _minimumTotalRounds = 1;
   bool isSimple = false;
+  Duration avgWorkTime = Duration();
+  Duration avgRestTime = Duration();
 
   String id;
   String name;
@@ -67,30 +67,6 @@ class IntervalTimer extends ChangeNotifier {
 
   }
 
-
-  
-  void updateFromPreset({
-    required int newRoundCount,
-    required Duration newWorkTime,
-    required Duration newRestTime,
-    required String id,
-  })
-  {
-    // remove listeners
-    for(Round round in rounds)
-    {
-      round.removeListener(update);
-    }
-
-    // rebuild rounds
-    rounds.clear();
-    for(int i = 0; i < newRoundCount; i++)
-    {
-      addRound(workTime: newWorkTime, restTime: newRestTime);
-    }
-    this.id = id;
-    _totalRounds = newRoundCount;
-  }
   /// Add a [Round] to this [IntervalTimer] with an optional [workTime] and [restTime]
   /// This will duplicate and add [Round] passed, otherwise creates a new [Round] 
   void addRound({
@@ -103,16 +79,15 @@ class IntervalTimer extends ChangeNotifier {
     if(duplicateRound != null)
     {
       newRound = duplicateRound;
-      newRound.addListener(update);
     }
     else
     {
       newRound = Round(initWorkTime: workTime, initRestTime: restTime);
-      newRound.addListener(update);
     }
+    newRound.addListener(update);
     rounds.add(newRound);
     _totalRounds++;
-    // notifyListeners();
+    notifyListeners();
   }
 
   /// Removes specified [round]. <br> 
@@ -171,14 +146,22 @@ class IntervalTimer extends ChangeNotifier {
   Duration get totalTime
   {
     Duration totalTime = Duration();
+    Duration totalRoundRest = Duration();
+    Duration totalRoundWork = Duration();
+    int totalSets = 0;
     for(Round round in rounds)
     {
+
       for(PhaseTimer timer in round.phaseTimers)
       {
         totalTime += timer.getWorkTime() + timer.getRestTime();
+        totalRoundRest += timer.getRestTime();
+        totalRoundWork += timer.getWorkTime();
       }
-      
+      totalSets += round.phaseTimers.length;
     }
+    avgRestTime = Duration(seconds: totalRoundRest.inSeconds ~/ totalSets); 
+    avgWorkTime = Duration(seconds: totalRoundWork.inSeconds ~/ totalSets);
     return totalTime;
   }
   // Start the current round

@@ -20,6 +20,15 @@ class TimeDisplayField extends StatefulWidget
     required this.onTimeChanged,
   });
 
+  /// Return string of [Duration] in format 00:00:00
+  static String timeDisplay(Duration time)
+  {
+    String h = time.inHours.remainder(60).toString().padLeft(2, '0');
+    String m = time.inMinutes.remainder(60).toString().padLeft(2, '0');
+    String s = time.inSeconds.remainder(60).toString().padLeft(2, '0');
+    return "$h:$m:$s";
+  }
+
  @override
   State<TimeDisplayField> createState() => _TimeDisplayFieldState();
 }
@@ -34,7 +43,8 @@ class _TimeDisplayFieldState extends State<TimeDisplayField> {
   void initState()
   {
     super.initState();
-    // [NOTE]: using remainder means that user can't enter more than 59 hours
+    // [NOTE]: using remainder means if entering more than 59 hours will not display correctly until
+    // the duration is <= 59 hours
     // This can be adjusted if needed but most people will not realistically require
     // such duration
     _hoursController = TextEditingController(
@@ -60,19 +70,16 @@ class _TimeDisplayFieldState extends State<TimeDisplayField> {
   }
 
   void _updateDuration() {
-    setState((){
-      // Try to display the time of the phaseTimer otherwise default to 0
-      int hours = int.tryParse(_hoursController.text) ?? 0;
-      int minutes = int.tryParse(_minutesController.text) ?? 0;
-      int seconds = int.tryParse(_secondsController.text) ?? 0;
-
-      Duration newDuration = Duration(
-        hours: hours,
-        minutes: minutes,
-        seconds: seconds,
-      );
-      widget.onTimeChanged(newDuration);
-    });
+     // Try to display the time of the phaseTimer otherwise default to 0
+    int hours = int.tryParse(_hoursController.text) ?? 0;
+    int minutes = int.tryParse(_minutesController.text) ?? 0;
+    int seconds = int.tryParse(_secondsController.text) ?? 0;
+    Duration newDuration = Duration(
+      hours: hours,
+      minutes: minutes,
+      seconds: seconds,
+    );
+    widget.onTimeChanged(newDuration);
   }
 
   @override
@@ -146,13 +153,4 @@ class _TimeDisplayFieldState extends State<TimeDisplayField> {
       ],
     );
   }
-}
-
-/// Convert Duration into 00:00:00 format
-String timeDisplay(Duration time)
-{
-  String h = time.inHours.remainder(60).toString().padLeft(2, '0');
-  String m = time.inMinutes.remainder(60).toString().padLeft(2, '0');
-  String s = time.inSeconds.remainder(60).toString().padLeft(2, '0');
-  return "$h:$m:$s";
 }

@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 import 'package:uuid/uuid.dart';
-// Custom classes
+// pages
 import 'package:fitness_app/pages/timer_page/timer_page.dart';
-import 'package:fitness_app/models/interval_timer.dart';
 import 'package:fitness_app/pages/timer_settings_page/timer_settings_page.dart';
-import 'package:fitness_app/models/json_storage.dart';
-import 'package:fitness_app/pages/timer_page/widgets/round_card_menu.dart';
+// utilities
+import 'package:fitness_app/utilities/interval_timer.dart';
+import 'package:fitness_app/utilities/json_storage.dart';
+// common
+import 'package:fitness_app/common/widgets/custom_pop_up_menu.dart';
+
+// widgets
+import 'widgets/quickstart.dart';
 
 class TimerSelectPage extends StatefulWidget
 {
@@ -24,9 +27,10 @@ class TimerSelectPage extends StatefulWidget
 
 class _TimerSelectPageState extends State<TimerSelectPage>
 {
+
   JsonStorage _timerStorage =  JsonStorage(
     fileName: "user_timers.json",
-    defaultValue: {"name": "default", "work": 60, "rest" : 30, "num_rounds" : 5}
+    defaultValue: {"name": "default", "timer_type": "simple", "num_rounds" : 5, "rounds": {"round_0" : [{"work": 60, "rest": 30}]}}
   );
 
   dynamic presetData;
@@ -35,7 +39,6 @@ class _TimerSelectPageState extends State<TimerSelectPage>
   Future<void> loadJsonAsset() async { 
     final String jsonString = await DefaultAssetBundle.of(context).loadString("assets/timer_presets.json"); 
     var data = json.decode(jsonString); 
-    print(data);
     setState(() { 
       presetData = data; 
     });
@@ -56,95 +59,21 @@ class _TimerSelectPageState extends State<TimerSelectPage>
     super.initState();
     // loadJsonAsset();
     _loadPresetData();
+    
   }
 
-  Widget customCard({String? name, Duration work = const Duration(), Duration rest = const Duration(),
-    int rounds = 99, 
-    required String id,
-    required Function onDelete
-  })
+  @override
+  void dispose()
   {
-    // total time is work + rest * number of rounds NOTE: this only applies to simple timers
-    IntervalTimer timer = IntervalTimer(id: id, workTime: work, restTime: rest, numRounds: rounds); 
-    Duration totalTime = timer.totalTime;
-    // Duration totalTime = Duration(seconds: ((work + rest) * rounds).inSeconds);
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(width: 5, color: Colors.grey),
-        color: Colors.white
-      ),
-      padding: EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text("$name",
-                style: TextStyle(fontWeight: FontWeight.bold)
-              ),
-              Text(durationString(totalTime))
-            ]
-          ),
-          Text("ROUNDS: $rounds"),
-          Text("Work: ${durationString(work)}"),
-          Text("Rest: ${durationString(rest)}"),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TextButton.icon(onPressed: (){
-                
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ChangeNotifierProvider(
-                        create: (context) => IntervalTimer(id: id, workTime: work, restTime: rest, numRounds: rounds),
-                        child: TimerPage(),
-                      )
-                    ),
-                  );
-
-              }, label: Text("Start"), icon: Icon(Icons.play_arrow)),
-              RoundCardPopUpMenu(
-                iconColor: Colors.blue,
-                onDelete: onDelete,
-                onEdit: () async {
-                  IntervalTimer settingsTimer = IntervalTimer(id: id, workTime: work, restTime: rest, numRounds: rounds);
-                  await Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ChangeNotifierProvider(
-                        create: (context) => settingsTimer,
-                        child: TimerSettingsPage(),
-                      )
-                    ),
-                  ).then((onValue) {
-                    if(onValue["save_data"])
-                    {
-                      // Update data
-                      // setState(() {
-                      //   _timerStorage[id] = settingsTimer.toJson();  
-                      // });
-                      print(settingsTimer.toJson());
-                      // Reload data to show changes
-                      _loadPresetData();
-                      
-                    }
-                  });
-                  
-                },
-                onDuplicate: (){}
-              )
-            ],
-          ),
-        ],
-      )
-    );
+    super.dispose();
   }
-  Widget customCardTwo ({
+
+  
+  Widget customCard ({
     required IntervalTimer timer,
     required Function onDelete
   })
   {
-    
-    // Duration totalTime = Duration(seconds: ((work + rest) * rounds).inSeconds);
     return Container(
       decoration: BoxDecoration(
         border: Border.all(width: 5, color: Colors.grey),
@@ -154,32 +83,13 @@ class _TimerSelectPageState extends State<TimerSelectPage>
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(timer.name,
                 style: TextStyle(fontWeight: FontWeight.bold)
               ),
-              Text(durationString(timer.totalTime))
-            ]
-          ),
-          Text("ROUNDS: ${timer.totalRounds}"),
-          Text("Work: "),
-          Text("Rest: "),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TextButton.icon(onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ChangeNotifierProvider(
-                        create: (context) => IntervalTimer.fromJson(jsonData: timer.toJson()),
-                        child: TimerPage(),
-                      )
-                    ),
-                  );
-
-              }, label: Text("Start"), icon: Icon(Icons.play_arrow)),
-              RoundCardPopUpMenu(
+              Center(child: Text(durationString(timer.totalTime))),
+              CustomPopUpMenu(
                 iconColor: Colors.blue,
                 onDelete: onDelete,
                 onEdit: () async {
@@ -200,7 +110,6 @@ class _TimerSelectPageState extends State<TimerSelectPage>
                       });
                       
                       _timerStorage.save();
-                      // print(settingsTimer.toJson());
                       // Reload data to show changes
                       _loadPresetData();
                       
@@ -210,6 +119,26 @@ class _TimerSelectPageState extends State<TimerSelectPage>
                 },
                 onDuplicate: (){}
               )
+            ]
+          ),
+          Text("ROUNDS: ${timer.totalRounds}"),
+          Text("AVG WORK: ${durationString(timer.avgWorkTime)}"),
+          Text("AVG REST: ${durationString(timer.avgRestTime)}"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton.icon(onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ChangeNotifierProvider(
+                        create: (context) => IntervalTimer.fromJson(jsonData: timer.toJson()),
+                        child: TimerPage(),
+                      )
+                    ),
+                  );
+
+              }, label: Text("Start"), icon: Icon(Icons.play_arrow)),
+              
             ],
           ),
         ],
@@ -220,8 +149,9 @@ class _TimerSelectPageState extends State<TimerSelectPage>
   /// Add default timer
   void _addTimer()
   {
-    print("adding timer");
-   _timerStorage[Uuid().v4()] = {"name": "default", "work": 3, "rest" : 1, "num_rounds" : 2};
+   _timerStorage[Uuid().v4()] = {"name": "new_timer", "timer_type": "simple", "num_rounds" : 3, "rounds": {"round_0" : [{"work": 60, "rest": 30}], 
+    "round_1" : [{"work": 60, "rest": 30}], "round_2" : [{"work": 60, "rest": 30}],
+   }};
 
     setState(() {
       presetData = _timerStorage.cache;
@@ -269,19 +199,12 @@ class _TimerSelectPageState extends State<TimerSelectPage>
 
             String id = entry.key;
             dynamic preset = entry.value;
-            return customCardTwo(timer: IntervalTimer.fromJson(
+            return customCard(timer: IntervalTimer.fromJson(
                 id: id,
                 jsonData: preset
               ), 
               onDelete: () => _removeData(id),
             );
-            // return customCard(
-            //   name: preset["name"],
-            //   id: id,
-            //   work: Duration(seconds: preset["work"]),
-            //   rest: Duration(seconds: preset["rest"]),
-            //   rounds: preset["num_rounds"],
-            //   onDelete: ()=> _removeData(id),
             //   );
           }).toList()
       );
@@ -298,21 +221,26 @@ class _TimerSelectPageState extends State<TimerSelectPage>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ElevatedButton(onPressed: (){}, child: Text("Quickstart")),
-                ElevatedButton(onPressed: _clearData, child: Icon(Icons.clear_all_outlined))
+                QuickStart(onPressed: (){}),
+                // ElevatedButton(onPressed: (){}, child: Text("Quickstart")),
+                // ElevatedButton(onPressed: _clearData, child: Icon(Icons.clear_all_outlined))
               ],
             ),
-            
             Flexible(
               child: SizedBox(
                 width: 400,
                 child: _displayInfo()
               )
-            )    
+            ),
+            // ElevatedButton(onPressed: () async{          
+                    
+                      
+                
+            // }, child: Icon(Icons.audiotrack))    
           ],
         ),
       ),
-      floatingActionButton: ElevatedButton(onPressed: () {
+      floatingActionButton: FloatingActionButton(onPressed: () {
         _addTimer();
       }, 
       child: Icon(Icons.add_alarm)),

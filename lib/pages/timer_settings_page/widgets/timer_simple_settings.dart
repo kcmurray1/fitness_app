@@ -1,9 +1,7 @@
-import 'dart:ui';
-
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:fitness_app/models/interval_timer.dart';
-import 'package:fitness_app/pages/timer_page/widgets/time_display.dart';
+import 'package:fitness_app/utilities/interval_timer.dart';
+import 'package:fitness_app/common/widgets/time_display.dart';
 
 class TimerSimpleSettings extends StatefulWidget
 {
@@ -54,6 +52,20 @@ class _TimerSimpleSettingState extends State<TimerSimpleSettings>
   {
     return Column(
         children: [
+           SizedBox(
+            width: 300,
+             child: TextFormField(
+                maxLength: 20,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 30
+                ),
+                initialValue: intervalTimer.name,
+                onChanged: (value){
+                  intervalTimer.name = value; 
+                },
+             ),
+           ),
            Text("Total Rounds",
             style: TextStyle(fontSize: _fontSize)),
             toggleRow(
@@ -64,8 +76,6 @@ class _TimerSimpleSettingState extends State<TimerSimpleSettings>
                 });
               }, 
               onAdd: (){
-                
-                // modeCheck(intervalTimer.isSimple, context);
                 setState(() {
                   intervalTimer.addRound();
                 });
@@ -89,8 +99,7 @@ class _TimerSimpleSettingState extends State<TimerSimpleSettings>
                         time: intervalTimer.rounds[0].phaseTimers[0].getWorkTime(),  
                         timeColor: Colors.black,
                         onTimeChanged:( (time) {
-                          
-                          // modeCheck(intervalTimer.isSimple, context);
+                          // intervalTimer.simplify();
                           setState((){intervalTimer.setAllRoundsWorkTime(time);});
                         })
                       ),
@@ -120,7 +129,7 @@ class _TimerSimpleSettingState extends State<TimerSimpleSettings>
                             onTimeChanged:( (time) {
                               
                               // modeCheck(intervalTimer.isSimple, context);
-                              setState((){intervalTimer.setAllRoundsWorkTime(time);});
+                              setState((){intervalTimer.setAllRoundsRestTime(time);});
                             })
                         ),
                       ),
@@ -132,7 +141,7 @@ class _TimerSimpleSettingState extends State<TimerSimpleSettings>
             )
           ),
           Padding(padding: EdgeInsets.all(_paddingBetweenItems)),
-          Text("Total time: ${timeDisplay(intervalTimer.totalTime)}",
+          Text("Total time: ${TimeDisplayField.timeDisplay(intervalTimer.totalTime)}",
           style: TextStyle(fontSize: _fontSize))
       
           ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fitness_app/models/phase_timer.dart';
-import 'package:fitness_app/pages/timer_page/widgets/time_display.dart';
+import 'package:fitness_app/utilities/phase_timer.dart';
+import 'package:fitness_app/common/widgets/time_display.dart';
 
 /// Displays [PhaseTimer._workTime] and [PhaseTimer._restTime] time for a given [PhaseTimer]
 class PhaseCard extends StatefulWidget {

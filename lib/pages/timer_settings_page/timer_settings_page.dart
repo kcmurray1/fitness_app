@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 // Settings Widgets
 import 'package:fitness_app/pages/timer_settings_page/widgets/timer_advanced_settings.dart';
 import 'package:fitness_app/pages/timer_settings_page/widgets/timer_simple_settings.dart';
-import 'package:fitness_app/models/interval_timer.dart';
+import 'package:fitness_app/utilities/interval_timer.dart';
 
 class TimerSettingsPage extends StatefulWidget {
   final IntervalTimer? timer;

@@ -1,9 +1,9 @@
-import 'package:fitness_app/models/round.dart';
+import 'package:fitness_app/utilities/round.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fitness_app/models/interval_timer.dart';
-import 'package:fitness_app/pages/timer_page/widgets/round_card.dart';
-import 'package:fitness_app/pages/timer_page/widgets/time_display.dart';
+import 'package:fitness_app/utilities/interval_timer.dart';
+import 'package:fitness_app/pages/timer_settings_page/widgets/round_card.dart';
+import 'package:fitness_app/common/widgets/time_display.dart';
 
 class TimerAdvancedSettings extends StatefulWidget {
     @override
@@ -21,9 +21,9 @@ class _TimerAdvancedSettingState extends State<TimerAdvancedSettings>
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(timeDisplay(intervalTimer.totalTime),
+                  Text("Total Time: ${TimeDisplayField.timeDisplay(intervalTimer.totalTime)}",
                   style: TextStyle(fontSize: 30)),
                 ],
               ),
@@ -78,6 +78,7 @@ class _TimerAdvancedSettingState extends State<TimerAdvancedSettings>
     Widget build(BuildContext context)
     {
         var intervalTimer = context.watch<IntervalTimer>();
+        intervalTimer.removeEmptyRounds();
         return buildDisplay(
           intervalTimer, 
           Theme.of(context).colorScheme.inversePrimary);

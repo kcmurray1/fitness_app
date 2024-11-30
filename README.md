@@ -52,16 +52,16 @@ Functionality Example:) '+': work time, '=': rest time
 	- Audio
 		- ticking noise for the last 3-5 seconds
 **TODO #5**
-- Timer Page
-	- Adjust timer_page so that leaving will stop the timer, currently, leaving the page while running will cause a dispose exception
-- SettingsPage
-	- Add IntervalTimer name field
-	- update Advanced settings page to remove empty rounds from the page(refer to timer_page use of removeEmptyRounds())
+- Timer Page [x]
+	- Adjust timer_page so that leaving will stop the timer, currently, leaving the page while running will cause a dispose exception [x]
+- SettingsPage [x]
+	- Add IntervalTimer name field [x]
+	- update Advanced settings page to remove empty rounds from the page(refer to timer_page use of removeEmptyRounds()) [x]
 - SelectorPage
 	- Update UI
 		- Build widget for Quickstart
-		- hide clear all button(keep for debug purposes)
-		- Determine how to display work and rest information for timers
+		- hide clear all button(keep for debug purposes) [x]
+		- Determine how to display work and rest information for timers [x] // displays average
 - GeneralSettingsPage
 	- Replace map page with settings page
 	- option to select time on/off color

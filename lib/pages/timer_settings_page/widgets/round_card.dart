@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fitness_app/models/round.dart';
+import 'package:fitness_app/utilities/round.dart';
 import 'phase_card.dart';
-import 'round_card_menu.dart';
+import 'package:fitness_app/common/widgets/custom_pop_up_menu.dart';
 
 /// Display [PhaseTimers] in this [Round] <br>
 /// Provides functionality for adding and removing timers from this [Round]
@@ -77,7 +77,7 @@ class _RoundCardState extends State<RoundCard> {
           ),
         ],
       ),
-      trailing: RoundCardPopUpMenu(
+      trailing: CustomPopUpMenu(
         onEdit: (){
           setState((){
             _isEditable = true;
