@@ -19,10 +19,10 @@ class JsonStorage
     return _cache;
   }
 
-  Future<File> get _localFile async {
+  Future<File> _localFile({String? name}) async {
     Directory directory = await getApplicationDocumentsDirectory();
 
-    return File('${directory.path}/${fileName}');
+    return File('${directory.path}/${name ?? fileName}');
   }
 
   /// Return read json content from storage
@@ -37,7 +37,7 @@ class JsonStorage
  
     try
     {
-      final File file = await _localFile;
+      final File file = await _localFile();
       final String content = await file.readAsString();
       _cache = jsonDecode(content);
     }
@@ -56,9 +56,9 @@ class JsonStorage
 
   /// Write _cache to file <br>
   /// Does not do anything if error occurs
-  Future<File> save() async
+  Future<File> save({String? name}) async
   {
-     final File file = await _localFile;
+     final File file = await _localFile(name: name);
 
     print("json_storage saving: $_cache");
     // _cache = jsonEncode(data);

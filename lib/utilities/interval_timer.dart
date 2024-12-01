@@ -47,6 +47,10 @@ class IntervalTimer extends ChangeNotifier {
     String id = "missing_id",
     required dynamic jsonData,
   }){
+    if(jsonData["name"] == null)
+    {
+      return IntervalTimer();
+    }
     IntervalTimer newTimer = IntervalTimer(
        name: jsonData["name"],
       id: id,
@@ -138,6 +142,12 @@ class IntervalTimer extends ChangeNotifier {
     }
     
   }
+
+  bool isSingleRound()
+  {
+    return rounds[_roundIndex].phaseTimers.length == 1;
+  }
+
   int get totalRounds
   {
     return _totalRounds;

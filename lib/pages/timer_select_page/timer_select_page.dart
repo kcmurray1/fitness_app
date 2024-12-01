@@ -10,6 +10,7 @@ import 'package:fitness_app/utilities/interval_timer.dart';
 import 'package:fitness_app/utilities/json_storage.dart';
 // common
 import 'package:fitness_app/common/widgets/custom_pop_up_menu.dart';
+import 'package:fitness_app/common/widgets/time_display.dart';
 
 // widgets
 import 'widgets/quickstart.dart';
@@ -61,13 +62,6 @@ class _TimerSelectPageState extends State<TimerSelectPage>
     _loadPresetData();
     
   }
-
-  @override
-  void dispose()
-  {
-    super.dispose();
-  }
-
   
   Widget customCard ({
     required IntervalTimer timer,
@@ -86,11 +80,10 @@ class _TimerSelectPageState extends State<TimerSelectPage>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(timer.name,
-                style: TextStyle(fontWeight: FontWeight.bold)
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)
               ),
-              Center(child: Text(durationString(timer.totalTime))),
               CustomPopUpMenu(
-                iconColor: Colors.blue,
+                iconColor: Theme.of(context).colorScheme.primary,
                 onDelete: onDelete,
                 onEdit: () async {
                   IntervalTimer settingsTimer = timer;
@@ -121,9 +114,20 @@ class _TimerSelectPageState extends State<TimerSelectPage>
               )
             ]
           ),
-          Text("ROUNDS: ${timer.totalRounds}"),
-          Text("AVG WORK: ${durationString(timer.avgWorkTime)}"),
-          Text("AVG REST: ${durationString(timer.avgRestTime)}"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("rounds: ${timer.totalRounds}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _customCardCenter("total", TimeDisplayField.timeDisplay(timer.totalTime)),
+              _customCardCenter("work", TimeDisplayField.timeDisplay(timer.avgWorkTime)),
+              _customCardCenter("rest", TimeDisplayField.timeDisplay(timer.avgRestTime)),
+            ],
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -143,6 +147,25 @@ class _TimerSelectPageState extends State<TimerSelectPage>
           ),
         ],
       )
+    );
+  }
+
+  Widget _customCardCenter(String title, String subTitle)
+  {
+    TextStyle titleStyle = TextStyle(
+      color: Theme.of(context).colorScheme.primary,
+      fontSize: 20,
+      fontWeight: FontWeight.bold
+    );
+
+    TextStyle subTitleStyle = TextStyle(
+      fontSize: 20 
+    );
+    return Column(
+      children:[
+        Text(title, style: titleStyle),
+        Text(subTitle, style: subTitleStyle)
+      ]
     );
   }
 
@@ -173,16 +196,7 @@ class _TimerSelectPageState extends State<TimerSelectPage>
     setState(() {
       presetData = _timerStorage.cache;
     });
-  }
-
-  String durationString(Duration duration)
-  {
-    String hours = duration.inHours.remainder(60).toString().padLeft(2, '0');
-    
-    String minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
-    
-    String seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
-    return "$hours:$minutes:$seconds";
+    _timerStorage.save();
   }
 
   Widget _displayInfo()
@@ -193,10 +207,15 @@ class _TimerSelectPageState extends State<TimerSelectPage>
     }
     else
     {
-      return ListView(
-        children:
-          presetData.entries.map<Widget>((entry){
+      List<Widget> children = [
+        if(presetData["quickstart"] == null)
+          QuickStart(storage: _timerStorage, numRounds: 5)
+        else
+          QuickStart.fromJson(storage: _timerStorage, jsonData: presetData["quickstart"])
+      ];
 
+      children.addAll(
+        presetData.entries.where((entry)=> entry.key != "quickstart").map<Widget>((entry){  
             String id = entry.key;
             dynamic preset = entry.value;
             return customCard(timer: IntervalTimer.fromJson(
@@ -205,8 +224,11 @@ class _TimerSelectPageState extends State<TimerSelectPage>
               ), 
               onDelete: () => _removeData(id),
             );
-            //   );
           }).toList()
+      );
+
+      return ListView(
+        children: children
       );
     }
   }
@@ -214,29 +236,18 @@ class _TimerSelectPageState extends State<TimerSelectPage>
   Widget build(BuildContext context)
   {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.grey,
       body: Center(
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                QuickStart(onPressed: (){}),
-                // ElevatedButton(onPressed: (){}, child: Text("Quickstart")),
-                // ElevatedButton(onPressed: _clearData, child: Icon(Icons.clear_all_outlined))
-              ],
-            ),
+            ElevatedButton(onPressed: () => _clearData(), child: Icon(Icons.clear_all)),
             Flexible(
               child: SizedBox(
                 width: 400,
                 child: _displayInfo()
               )
             ),
-            // ElevatedButton(onPressed: () async{          
-                    
-                      
-                
-            // }, child: Icon(Icons.audiotrack))    
           ],
         ),
       ),

@@ -7,7 +7,7 @@ class Round extends ChangeNotifier {
   List<PhaseTimer> phaseTimers = [];
   int _phaseTimerIndex = 0;
   bool isStarted = false;
-  int _defaultSets = 3;
+  int _defaultSets = 1;
   final Duration initWorkTime;
   final Duration initRestTime;
   

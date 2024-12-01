@@ -38,7 +38,7 @@ class _TimerPage extends State<TimerPage>
     return restColor;
   }
 
-    /// Create Start, Pause, Restart, and Cancel buttons based on the
+  /// Create Start, Pause, Restart, and Cancel buttons based on the
   /// state of this [IntervalTimer]
   Widget buildTimerControl(IntervalTimer timer, BuildContext context)
   {
@@ -46,9 +46,8 @@ class _TimerPage extends State<TimerPage>
     if (!timer.isStarted)
     {
       return buildCustomButton(
-        text: "Start",
+        text: "START",
         context: context,
-        width: 300,
         height: 70,
         fontSize: 30,
         onHold: (){},
@@ -68,9 +67,11 @@ class _TimerPage extends State<TimerPage>
             // display 'pause' button during countown then switch to 'resume'
             // after pressing pause
             buildCustomButton(
-              text: timer.isRunning() ? "pause" : "resume",
+              text: timer.isRunning() ? "PAUSE" : "RESUME",
               context: context,
-              onHold: (){},
+              onHold: (){
+
+              },
               onPressed: ()
               {
                 if (timer.isRunning())
@@ -95,7 +96,7 @@ class _TimerPage extends State<TimerPage>
     required VoidCallback onPressed,
     required VoidCallback onHold,
     required BuildContext context,
-    double width = 180,
+    double width = 300,
     double height = 65,
     Color? color,
     double fontSize = 20,
@@ -135,6 +136,7 @@ class _TimerPage extends State<TimerPage>
                       fontWeight: FontWeight.bold
                     )
                   ),
+                  if(!intervalTimer.isSingleRound())
                   Text(
                     intervalTimer.getRoundProgress,
                     style: TextStyle(
@@ -171,6 +173,7 @@ class _TimerPage extends State<TimerPage>
                   children:  [
                     buildCustomButton(
                       text: "HOLD TO EXIT",
+                      // width: 300,
                       context: context,
                       onPressed: (){},
                       onHold: ()

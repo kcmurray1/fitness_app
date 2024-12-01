@@ -20,17 +20,30 @@ class _TimerAdvancedSettingState extends State<TimerAdvancedSettings>
           color: backgroundColor,
           child: Column(
             children: [
+              SizedBox(
+                width: 300,
+                child: TextFormField(
+                    maxLength: 20,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 30
+                    ),
+                    initialValue: intervalTimer.name,
+                    onChanged: (value){
+                      intervalTimer.name = value; 
+                  },
+                )
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: [   
                   Text("Total Time: ${TimeDisplayField.timeDisplay(intervalTimer.totalTime)}",
                   style: TextStyle(fontSize: 30)),
                 ],
               ),
               Flexible(
-                  child: Container(
+                  child: SizedBox(
                     width: 370,
-                    // color: Colors.blueGrey.shade500,
                     child: Scrollbar(
                       thumbVisibility: true,
                       trackVisibility: true,

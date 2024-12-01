@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fitness_app/pages/timer_settings_page/widgets/timer_advanced_settings.dart';
 import 'package:fitness_app/pages/timer_settings_page/widgets/timer_simple_settings.dart';
 import 'package:fitness_app/utilities/interval_timer.dart';
+import 'widgets/timer_help.dart';
 
 class TimerSettingsPage extends StatefulWidget {
   final IntervalTimer? timer;
@@ -29,7 +30,6 @@ class _TimerSettingsPage extends State<TimerSettingsPage> {
   Widget build(BuildContext context) {
     Color selectedButtonColor = Theme.of(context).colorScheme.surface;
     Color unselectedButtonColor = Colors.grey;
-    
     //https://stackoverflow.com/questions/50452710/catch-android-back-button-event-on-flutter
     return PopScope(
       canPop: false,
@@ -80,13 +80,8 @@ class _TimerSettingsPage extends State<TimerSettingsPage> {
                         )
                       )
                     ),
-                    OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        shape: CircleBorder()
-                      ),
-                      onPressed: (){}, 
-                      child: Icon(Icons.help))
+                    Spacer(),
+                    TimerHelp()
                   ],
                 )
             ),

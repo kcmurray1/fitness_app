@@ -59,13 +59,17 @@ Functionality Example:) '+': work time, '=': rest time
 	- update Advanced settings page to remove empty rounds from the page(refer to timer_page use of removeEmptyRounds()) [x]
 - SelectorPage
 	- Update UI
-		- Build widget for Quickstart
+		- Build widget for Quickstart [x]
 		- hide clear all button(keep for debug purposes) [x]
 		- Determine how to display work and rest information for timers [x] // displays average
+***TODO #6 ***
 - GeneralSettingsPage
-	- Replace map page with settings page
+	- add settings page
 	- option to select time on/off color
-
+- TimeDisplay
+	- pad 0 when user enters single digit.
+		- Ex: 6 -> 06 
+	-
 
 **State Organization** [x]
 - remove use of changenotifierprovider in main.dart [x]
