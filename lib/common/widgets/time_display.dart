@@ -74,6 +74,7 @@ class _TimeDisplayFieldState extends State<TimeDisplayField> {
     int hours = int.tryParse(_hoursController.text) ?? 0;
     int minutes = int.tryParse(_minutesController.text) ?? 0;
     int seconds = int.tryParse(_secondsController.text) ?? 0;
+
     Duration newDuration = Duration(
       hours: hours,
       minutes: minutes,
@@ -85,6 +86,9 @@ class _TimeDisplayFieldState extends State<TimeDisplayField> {
   @override
   void dispose()
   {
+     _hoursController.removeListener(_updateDuration);
+    _secondsController.removeListener(_updateDuration);
+    _minutesController.removeListener(_updateDuration);
     _hoursController.dispose();
     _minutesController.dispose();
     _secondsController.dispose();

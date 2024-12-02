@@ -241,7 +241,7 @@ class _TimerSelectPageState extends State<TimerSelectPage>
       body: Center(
         child: Column(
           children: [
-            ElevatedButton(onPressed: () => _clearData(), child: Icon(Icons.clear_all)),
+            // ElevatedButton(onPressed: () => _clearData(), child: Icon(Icons.clear_all)),
             Flexible(
               child: SizedBox(
                 width: 400,

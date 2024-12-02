@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:fitness_app/pages/map_page/map.dart';
 import 'package:flutter/services.dart';
 import 'package:fitness_app/pages/timer_select_page/timer_select_page.dart';
+import 'package:fitness_app/pages/settings_page/settings_page.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 enum Page {
-  map,
   timerSelection,
+  map,
+  settings,
 }
 
 class MyApp extends StatelessWidget {
@@ -51,6 +53,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   
   Page pageIndex = Page.timerSelection;
+  TextStyle textStyle = TextStyle(fontSize: 20);
   bool displayMenu = false;
   @override
   Widget build(BuildContext context) {
@@ -59,8 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     switch(pageIndex)
     {
-      // case Page.timer:
-      //   page = TimerPage();
+      case Page.settings:
+        page = SettingsPage();
       case Page.map:
         page = MapPage();
       case Page.timerSelection:
@@ -113,27 +116,21 @@ class _MyHomePageState extends State<MyHomePage> {
                   backgroundColor: Theme.of(context).colorScheme.primaryFixedDim,
                   extended: constraints.maxWidth >= 400,
                   destinations: [
-                    // NavigationRailDestination(
-                    //   icon: Icon(Icons.access_time_outlined), 
-                    //   label: Text(
-                    //     "Timer",
-                    //     style: TextStyle(fontSize: 20)
-                    //   ),
-                    // ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.timer), 
+                      label: Text(
+                        "Timer",
+                        style: textStyle,
+                      )
+                    ),
                     NavigationRailDestination(
                       icon: Icon(Icons.map), 
                       label: Text(
                         "Map",
-                        style: TextStyle(fontSize: 20),
+                        style: textStyle,
                       )
                     ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.timer), 
-                      label: Text(
-                        "timer",
-                        style: TextStyle(fontSize: 20),
-                      )
-                    )
+                    NavigationRailDestination(icon: Icon(Icons.settings), label: Text("Settings", style: textStyle))
                   ], 
                   selectedIndex: pageIndex.index,
                   onDestinationSelected: (value)
