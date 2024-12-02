@@ -1,6 +1,8 @@
 
 
+import 'package:fitness_app/pages/settings_page/widgets/color_widget.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class SettingsPage extends StatefulWidget
 {
@@ -11,6 +13,23 @@ class SettingsPage extends StatefulWidget
 class _SettingsPageState extends State<SettingsPage>
 {
   TextStyle textStyle = TextStyle(fontSize: 35);
+
+  Future<void> loadJsonAsset() async { 
+    final String jsonString = await DefaultAssetBundle.of(context).loadString("assets/timer_presets.json"); 
+    var data = json.decode(jsonString); 
+
+    print(data);
+   
+  } 
+
+  @override
+  void initState()
+  {
+    super.initState();
+    loadJsonAsset();
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +41,7 @@ class _SettingsPageState extends State<SettingsPage>
           ListTile(title: Text("work", style: textStyle)),
           
           ListTile(title: Text("rest", style: textStyle)),
+          ColorPaletteWidget()
         ],
       )); 
   }

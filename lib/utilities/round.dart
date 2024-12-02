@@ -12,8 +12,8 @@ class Round extends ChangeNotifier {
   final Duration initRestTime;
   
   Round({
-    this.initWorkTime = const Duration(seconds: 1),
-    this.initRestTime = const Duration(seconds: 1),
+    this.initWorkTime = const Duration(seconds: 60),
+    this.initRestTime = const Duration(seconds: 30),
     bool defaultInit = true
   })
   {

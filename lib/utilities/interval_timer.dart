@@ -18,12 +18,15 @@ class IntervalTimer extends ChangeNotifier {
   Duration avgWorkTime = Duration();
   Duration avgRestTime = Duration();
 
+  static const Duration defaultWork = Duration(minutes: 1);
+  static const Duration defaultRest = Duration(seconds: 30); 
+
   String id;
   String name;
 
   IntervalTimer({
-    Duration workTime = const Duration(seconds: 5), 
-    Duration restTime = const Duration(seconds:  2), 
+    Duration workTime = defaultWork, 
+    Duration restTime = defaultRest, 
     int numRounds = 2,
     this.id = "temp",
     this.name = "no_name",
@@ -74,8 +77,8 @@ class IntervalTimer extends ChangeNotifier {
   /// Add a [Round] to this [IntervalTimer] with an optional [workTime] and [restTime]
   /// This will duplicate and add [Round] passed, otherwise creates a new [Round] 
   void addRound({
-    Duration workTime = const Duration(seconds: 5),
-    Duration restTime = const Duration (seconds: 2),
+    Duration workTime = defaultWork,
+    Duration restTime = defaultRest,
     Round? duplicateRound
   })
   {
