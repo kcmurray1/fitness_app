@@ -78,7 +78,7 @@ Functionality Example:) '+': work time, '=': rest time
 
 ***TODO #6***
 - GeneralSettingsPage
-	- add settings page
+	- add settings page [x]
 	- option to select time on/off color
 
 **State Organization** [x]

@@ -103,56 +103,62 @@ class _TimeDisplayFieldState extends State<TimeDisplayField> {
     var cursorColor = Theme.of(context).colorScheme.inversePrimary;
     int timeDisplayLength = 2;
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         if(widget.label != "")
           Text(
             widget.label,
             style: TextStyle(fontSize: 30, color: widget.labelColor),
           ),
-        SizedBox(
-          width: 50,
-          child: TextFormField(
-            controller: _hoursController,
-            keyboardType: TextInputType.number,
-            cursorColor: cursorColor,
-            maxLength: timeDisplayLength,
-            buildCounter: (BuildContext context, {int? currentLength, int? maxLength, bool? isFocused}) => null,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 30, color: widget.timeColor),
-          ),
-        ),
-        Text(
-          ":",
-          style: TextStyle(fontSize: 30, color: widget.timeColor),
-        ),
-        SizedBox(
-          width: 50,
-          child: TextFormField(
-            controller: _minutesController,
-            keyboardType: TextInputType.number,
-            maxLength: timeDisplayLength,
-            cursorColor: cursorColor,
-            buildCounter: (BuildContext context, {int? currentLength, int? maxLength, bool? isFocused}) => null,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 30, color: widget.timeColor),
-          ),
-        ),
-        Text(
-          ":",
-          style: TextStyle(fontSize: 30, color: widget.timeColor),
-        ),
-        SizedBox(
-          width: 50,
-          child: TextFormField(
-            controller: _secondsController,
-            keyboardType: TextInputType.number,
-            maxLength: timeDisplayLength,
-            cursorColor: cursorColor,
-            buildCounter: (BuildContext context, {int? currentLength, int? maxLength, bool? isFocused}) => null,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 30, color: widget.timeColor),
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+           
+            SizedBox(
+              width: 50,
+              child: TextFormField(
+                controller: _hoursController,
+                keyboardType: TextInputType.number,
+                cursorColor: cursorColor,
+                maxLength: timeDisplayLength,
+                buildCounter: (BuildContext context, {int? currentLength, int? maxLength, bool? isFocused}) => null,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 30, color: widget.timeColor),
+              ),
+            ),
+            Text(
+              ":",
+              style: TextStyle(fontSize: 30, color: widget.timeColor),
+            ),
+            SizedBox(
+              width: 50,
+              child: TextFormField(
+                controller: _minutesController,
+                keyboardType: TextInputType.number,
+                maxLength: timeDisplayLength,
+                cursorColor: cursorColor,
+                buildCounter: (BuildContext context, {int? currentLength, int? maxLength, bool? isFocused}) => null,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 30, color: widget.timeColor),
+              ),
+            ),
+            Text(
+              ":",
+              style: TextStyle(fontSize: 30, color: widget.timeColor),
+            ),
+            SizedBox(
+              width: 50,
+              child: TextFormField(
+                controller: _secondsController,
+                keyboardType: TextInputType.number,
+                maxLength: timeDisplayLength,
+                cursorColor: cursorColor,
+                buildCounter: (BuildContext context, {int? currentLength, int? maxLength, bool? isFocused}) => null,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 30, color: widget.timeColor),
+              ),
+            ),
+          ],
         ),
       ],
     );

@@ -16,8 +16,10 @@ class ColorPaletteWidget extends StatelessWidget
       Color firstHalf = TimerBackgroundColors.all[i];
       Color secondHalf = TimerBackgroundColors.all[TimerBackgroundColors.all.length - i - 1];
 
-      topHalf.add(ColorWidget(color: firstHalf));
-      botHalf.add(ColorWidget(color: secondHalf));
+      topHalf.add(ColorWidget(color: firstHalf, onPressed: (){
+      }));
+      botHalf.add(ColorWidget(color: secondHalf, onPressed: (){
+      },));
 
     }
   }
@@ -27,10 +29,12 @@ class ColorPaletteWidget extends StatelessWidget
     return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
               children: topHalf,
             ),
+            Padding(padding: EdgeInsets.all(15)),
             Row(
               children: botHalf,
             )
@@ -43,22 +47,35 @@ class ColorPaletteWidget extends StatelessWidget
 class ColorWidget extends StatelessWidget
 {
   final Color color;
+  final double spacing;
+  final double size;
+  final Function onPressed;
+
   ColorWidget({
     super.key,
     required this.color,
+    required this.onPressed,
+    this.size = 75,
+    this.spacing = 100
   });
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
-      style: OutlinedButton.styleFrom(
-        shape: CircleBorder(),
-        side: BorderSide(color: const Color.fromARGB(255, 120, 120, 120))
+    return SizedBox(
+      width: spacing,
+      height: size,
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          padding: EdgeInsets.all(5),
+          shape: CircleBorder(),
+          side: BorderSide(color: const Color.fromARGB(255, 120, 120, 120))
+        ),
+        onPressed: () => onPressed(),
+        child: CircleAvatar(
+          radius: size,
+          backgroundColor: color,
+        )
       ),
-      onPressed: (){},
-      child: CircleAvatar(
-        backgroundColor: color,
-      )
     ); 
 
   }

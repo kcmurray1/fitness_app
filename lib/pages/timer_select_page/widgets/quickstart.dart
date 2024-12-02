@@ -9,7 +9,6 @@ import 'package:fitness_app/pages/timer_page/timer_page.dart';
 
 class QuickStart extends StatefulWidget
 {
-  // final Function onChanged;
   final JsonStorage storage;
   static String text = "QUICKSTART";
   int numRounds;

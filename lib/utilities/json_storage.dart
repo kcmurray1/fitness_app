@@ -7,12 +7,14 @@ class JsonStorage
 {
   final String fileName;
   final dynamic defaultValue;
+  final dynamic defaultKey;
 
   dynamic _cache;
 
   JsonStorage({
       required this.fileName,
       this.defaultValue = const {},
+      this.defaultKey
   });
 
   dynamic get cache {
@@ -48,7 +50,7 @@ class JsonStorage
 
     if(_cache.isEmpty)
     {
-      _cache["default"] = defaultValue;
+      _cache[defaultKey ?? "default"] = defaultValue;
     }
     print("JsonStorage read $_cache");
     return _cache;

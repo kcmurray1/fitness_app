@@ -14,29 +14,49 @@ class _TimerSimpleSettingState extends State<TimerSimpleSettings>
 
   double _fontSize = 30;
   double _paddingBetweenItems = 15.0;
+  bool ackWarning = false;
 
-  Future<void> displayWarning(IntervalTimer timer, BuildContext context, {required Function onAccept})
+
+  void idk(IntervalTimer timer, BuildContext context, {required onAccept}) async
   {
-    if(!timer.isSimple)
+    await displayWarning(timer, context)
+      .then((onValue){
+        print(onValue);
+        if(onValue)
+        {
+          timer.simplify();
+          onAccept();
+        }
+      });
+  }
+
+  bool _ignoreWarning()
+  {
+    return ackWarning == true;
+  }
+  
+
+  Future<dynamic> displayWarning(IntervalTimer timer, BuildContext context)
+  {
+    if(!ackWarning)
     {
-      timer.isSimple = true;
       return showDialog(
         context: context,
         barrierDismissible: false, 
         builder: (BuildContext context) => AlertDialog(
           title: Center(child: Text("Warning: Override Changes")),
-          content: Text("Using the Simple Editor overrides changes made by the Advanced Editor.\n"),
+          content: Text("Using the Simple Editor may override changes made with the Advanced Editor.\n", style: TextStyle(fontSize: 20)),
           actions: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextButton(onPressed: (){
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(false);
                 }, child: Text("Cancel")),
                   
                 TextButton(onPressed: (){
-                    Navigator.of(context).pop();
-                    onAccept();
+                    Navigator.of(context).pop(true);
+                    ackWarning = true;
                 }, child: Text("Continue")),
               ],
             )
@@ -45,7 +65,7 @@ class _TimerSimpleSettingState extends State<TimerSimpleSettings>
         )
       );
     }
-    return Future((){});
+    return Future(() => _ignoreWarning());
   }
 
   Widget buildDisplay(IntervalTimer intervalTimer, BuildContext context)
@@ -127,8 +147,6 @@ class _TimerSimpleSettingState extends State<TimerSimpleSettings>
                             time: intervalTimer.rounds[0].phaseTimers[0].getRestTime(),  
                             timeColor: Colors.black,
                             onTimeChanged:( (time) {
-                              
-                              // modeCheck(intervalTimer.isSimple, context);
                               setState((){intervalTimer.setAllRoundsRestTime(time);});
                             })
                         ),
@@ -162,9 +180,7 @@ class _TimerSimpleSettingState extends State<TimerSimpleSettings>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              ElevatedButton(onPressed: () async {
-                  await displayWarning(timer, context, onAccept: ()=> onAdd());
-              }, 
+              ElevatedButton(onPressed: ()=> idk(timer, context, onAccept: ()=> onAdd()), 
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(),
@@ -174,10 +190,7 @@ class _TimerSimpleSettingState extends State<TimerSimpleSettings>
                 size: iconSize
               )),
               child,
-              ElevatedButton(
-                onPressed: () {
-                  onRemove();
-                },
+              ElevatedButton(onPressed: ()=> idk(timer, context, onAccept: ()=> onRemove()), 
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero, 
                   shape: RoundedRectangleBorder(), 

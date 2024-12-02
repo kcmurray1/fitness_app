@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'phase_timer.dart';
 import 'round.dart';
 
-/// Creates a
-/// 
-/// awd 
+
 class IntervalTimer extends ChangeNotifier {
   int _totalRounds = 0;
   int round = 1;
