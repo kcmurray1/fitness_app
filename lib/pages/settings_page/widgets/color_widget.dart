@@ -5,9 +5,11 @@ class ColorPaletteWidget extends StatelessWidget
 {
   List<ColorWidget> topHalf = [];
   List<ColorWidget> botHalf = [];
+  final ValueChanged<Color> onColorWidgetPressed;
   
   ColorPaletteWidget({
     super.key,
+    required this.onColorWidgetPressed
   })
   {
    
@@ -16,10 +18,8 @@ class ColorPaletteWidget extends StatelessWidget
       Color firstHalf = TimerBackgroundColors.all[i];
       Color secondHalf = TimerBackgroundColors.all[TimerBackgroundColors.all.length - i - 1];
 
-      topHalf.add(ColorWidget(color: firstHalf, onPressed: (){
-      }));
-      botHalf.add(ColorWidget(color: secondHalf, onPressed: (){
-      },));
+      topHalf.add(ColorWidget(color: firstHalf, onPressed: (color) => onColorWidgetPressed(firstHalf)));
+      botHalf.add(ColorWidget(color: secondHalf, onPressed: (color) => onColorWidgetPressed(secondHalf)));
 
     }
   }
@@ -49,7 +49,7 @@ class ColorWidget extends StatelessWidget
   final Color color;
   final double spacing;
   final double size;
-  final Function onPressed;
+  final ValueChanged<Color> onPressed;
 
   ColorWidget({
     super.key,
@@ -70,7 +70,7 @@ class ColorWidget extends StatelessWidget
           shape: CircleBorder(),
           side: BorderSide(color: const Color.fromARGB(255, 120, 120, 120))
         ),
-        onPressed: () => onPressed(),
+        onPressed: () => onPressed(color),
         child: CircleAvatar(
           radius: size,
           backgroundColor: color,

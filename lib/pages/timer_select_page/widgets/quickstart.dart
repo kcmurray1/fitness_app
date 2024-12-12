@@ -1,4 +1,5 @@
 
+import 'package:fitness_app/common/config/timer_background.dart';
 import 'package:flutter/material.dart';
 import 'package:fitness_app/common/widgets/time_display.dart';
 import 'package:provider/provider.dart';
@@ -14,12 +15,16 @@ class QuickStart extends StatefulWidget
   int numRounds;
   Duration restTime;
   Duration workTime;
+  final Color restColor;
+  final Color workColor;
 
   QuickStart({super.key,
     required this.storage,
     this.numRounds = 99,
     this.restTime = const Duration(seconds: 30), 
-    this.workTime = const Duration(seconds: 15)   
+    this.workTime = const Duration(seconds: 15),
+    required this.restColor,
+    required this.workColor
   });
 
   factory QuickStart.fromJson ({
@@ -34,6 +39,8 @@ class QuickStart extends StatefulWidget
       numRounds: jsonData["numRounds"],
       workTime: Duration(seconds: jsonData["work"]),
       restTime: Duration(seconds: jsonData["rest"]),
+      workColor: TimerBackgroundColors.lightBlue,
+      restColor: TimerBackgroundColors.brightPurple,
       );
   }
 
@@ -117,7 +124,7 @@ class _QuickStartState extends State<QuickStart>
                       MaterialPageRoute(
                         builder: (context) => ChangeNotifierProvider(
                           create: (context) => IntervalTimer(numRounds: widget.numRounds, workTime: widget.workTime, restTime: widget.restTime),
-                          child: TimerPage(),
+                          child: TimerPage(restColor: widget.restColor, workColor: widget.workColor),
                         )
                         ),
                       )

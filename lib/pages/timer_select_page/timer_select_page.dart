@@ -1,3 +1,5 @@
+import 'package:fitness_app/common/config/default_config.dart';
+import 'package:fitness_app/common/config/user_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
@@ -31,10 +33,17 @@ class _TimerSelectPageState extends State<TimerSelectPage>
 
   JsonStorage _timerStorage =  JsonStorage(
     fileName: "user_timers.json",
-    defaultValue: {"name": "default", "timer_type": "simple", "num_rounds" : 5, "rounds": {"round_0" : [{"work": 60, "rest": 30}]}}
+    defaultValue: DefaultConfig.defaultTimer
+    );
+
+  JsonStorage _configStorage =  JsonStorage(
+    fileName: "user_config.json",
+    defaultValue: DefaultConfig.defaultBackground,
+    defaultKey: "user"
   );
 
   dynamic presetData;
+  dynamic timerUiData;
 
 
   Future<void> loadJsonAsset() async { 
@@ -50,8 +59,16 @@ class _TimerSelectPageState extends State<TimerSelectPage>
     _timerStorage.read().then((value){
       setState(() {
         presetData = value;
-      }); 
+      });   
     });
+
+    _configStorage.read().then((value){
+      setState(() {
+        timerUiData = value;
+      });
+    });
+   
+
   }
 
   @override
@@ -136,7 +153,7 @@ class _TimerSelectPageState extends State<TimerSelectPage>
                     MaterialPageRoute(
                       builder: (context) => ChangeNotifierProvider(
                         create: (context) => IntervalTimer.fromJson(jsonData: timer.toJson()),
-                        child: TimerPage(),
+                        child: TimerPage(restColor: UserConfig.getRestColor(timerUiData), workColor: UserConfig.getWorkColor(timerUiData)),
                       )
                     ),
                   );
@@ -172,9 +189,7 @@ class _TimerSelectPageState extends State<TimerSelectPage>
   /// Add default timer
   void _addTimer()
   {
-   _timerStorage[Uuid().v4()] = {"name": "new_timer", "timer_type": "simple", "num_rounds" : 3, "rounds": {"round_0" : [{"work": 60, "rest": 30}], 
-    "round_1" : [{"work": 60, "rest": 30}], "round_2" : [{"work": 60, "rest": 30}],
-   }};
+   _timerStorage[Uuid().v4()] = DefaultConfig.defaultAddTimer;
 
     setState(() {
       presetData = _timerStorage.cache;
@@ -201,7 +216,7 @@ class _TimerSelectPageState extends State<TimerSelectPage>
 
   Widget _displayInfo()
   {
-    if(presetData == null)
+    if(presetData == null || timerUiData == null)
     {
       return Text("Loading data...");
     }
@@ -209,7 +224,7 @@ class _TimerSelectPageState extends State<TimerSelectPage>
     {
       List<Widget> children = [
         if(presetData["quickstart"] == null)
-          QuickStart(storage: _timerStorage, numRounds: 5)
+          QuickStart(storage: _timerStorage, numRounds: 5, restColor: UserConfig.getRestColor(_configStorage), workColor: UserConfig.getWorkColor(_configStorage))
         else
           QuickStart.fromJson(storage: _timerStorage, jsonData: presetData["quickstart"])
       ];

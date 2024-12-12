@@ -2,16 +2,26 @@
 import 'package:flutter/material.dart';
 import 'package:fitness_app/pages/settings_page/widgets/color_widget.dart';
 
-class ColorSelector extends StatelessWidget
+class ColorSelector extends StatefulWidget
 {
-  double colorWidgetSize = 50;
-  double colorWidgetSpacing = 50;
-  final Color initialColor;
+  Color initialColor;
+  final Function onColorChange;
 
   ColorSelector({
     super.key,
-    required this.initialColor
+    required this.initialColor,
+    required this.onColorChange
   });
+
+  @override
+  State<ColorSelector> createState() => _ColorSelectorState();
+}
+
+class _ColorSelectorState extends State<ColorSelector>
+{
+  double colorWidgetSize = 50;
+  double colorWidgetSpacing = 50;
+
 
   Future<void> _buildPopUp(BuildContext context)
   {
@@ -21,7 +31,14 @@ class ColorSelector extends StatelessWidget
         content: SizedBox(
           height: 200,
           child: Center(
-            child: ColorPaletteWidget()),
+            child: ColorPaletteWidget(
+              onColorWidgetPressed: (color){
+                setState(() {
+                  widget.initialColor = color;
+                });
+                Navigator.of(context).pop();
+              },
+            )),
         ),   
         actions: []
       ),
@@ -33,8 +50,11 @@ class ColorSelector extends StatelessWidget
   {
 
     return ColorWidget(
-              color: initialColor,
-              onPressed: () => _buildPopUp(context),
+              color: widget.initialColor,
+              onPressed: (color) async {
+                await _buildPopUp(context);
+                widget.onColorChange(widget.initialColor);
+              },
               size: colorWidgetSize,
               spacing: colorWidgetSpacing,  
     );

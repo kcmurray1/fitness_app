@@ -6,13 +6,17 @@ import 'package:fitness_app/utilities/interval_timer.dart';
 class TimerPage extends StatefulWidget
 {
   final IntervalTimer? timer;
+  final Color restColor;
+  final Color workColor;
   
   /// Creates [TimerPage] that listens to parent
   /// Widget containing a [IntervalTimer] provider. <br>
   /// This TimerPage will optionally listen to timer, if provided.
   TimerPage({
     super.key,
-    this.timer
+    this.timer,
+    required this.restColor,
+    required this.workColor
   });
 
   @override
@@ -20,11 +24,7 @@ class TimerPage extends StatefulWidget
 }
 
 class _TimerPage extends State<TimerPage>
-{
-  Color restColor = Color.fromARGB(175, 226, 86, 86);
-  Color workColor = Color.fromARGB(207, 125, 220, 91);
-
-  
+{ 
   Color _toggleBackgroundColor(bool isWork, bool status)
   {
     if(!status)
@@ -33,9 +33,9 @@ class _TimerPage extends State<TimerPage>
     }
     if(isWork)
     {
-      return workColor;
+      return widget.workColor;
     }
-    return restColor;
+    return widget.restColor;
   }
 
   /// Create Start, Pause, Restart, and Cancel buttons based on the

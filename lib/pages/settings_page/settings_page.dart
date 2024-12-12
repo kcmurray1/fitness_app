@@ -1,7 +1,11 @@
 
 
+import 'dart:convert';
+
 import 'package:fitness_app/common/config/timer_background.dart';
+import 'package:fitness_app/common/config/user_config.dart';
 import 'package:fitness_app/pages/settings_page/widgets/color_selector.dart';
+import 'package:fitness_app/utilities/color_utils.dart';
 import 'package:fitness_app/utilities/json_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +24,8 @@ class _SettingsPageState extends State<SettingsPage>
 
    JsonStorage _configStorage =  JsonStorage(
     fileName: "user_config.json",
-    defaultValue: {"work_color" : TimerBackgroundColors.limeGreen, "rest_color": TimerBackgroundColors.red},
+    defaultValue: {"work_color" : ColorUtils.serialize(TimerBackgroundColors.limeGreen), 
+                   "rest_color": ColorUtils.serialize(TimerBackgroundColors.red)},
     defaultKey: "user"
   );
 
@@ -46,6 +51,14 @@ class _SettingsPageState extends State<SettingsPage>
   }
 
   @override
+  void dispose()
+  {
+    _configStorage.save();
+    super.dispose();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
@@ -55,12 +68,32 @@ class _SettingsPageState extends State<SettingsPage>
           ListTile(title: Text("colors", style: textStyle)),
           if(presetData != null)
           ListTile(title: Text("work", style: textStyle),
-          trailing: ColorSelector(initialColor: presetData["user"]["work_color"])
+          trailing: ColorSelector(initialColor: UserConfig.getWorkColor(presetData),
+            onColorChange: (color){
+              UserConfig.setWorkColor(presetData, color);
+              _configStorage.save();
+            }
+          )
           ),
           if(presetData != null)
           ListTile(title: Text("rest", style: textStyle),
-            trailing: ColorSelector(initialColor: presetData["user"]["rest_color"])
+            trailing: ColorSelector(initialColor:  UserConfig.getRestColor(presetData),
+            onColorChange: (color){
+              UserConfig.setRestColor(presetData, color);
+              setState(() {
+                _configStorage.save();
+              });
+            },
+            )
           ),
+          ElevatedButton(
+            onPressed: (){
+              setState(() {
+                _configStorage.clear();  
+              });
+            },
+            child: Text("USE DEFAULT"),
+          )
         ],
       )); 
   }
