@@ -1,7 +1,9 @@
+import 'package:fitness_app/pages/timer_page/widgets/sound_player.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'phase_timer.dart';
 import 'round.dart';
+import 'package:fitness_app/pages/timer_page/widgets/sound_player.dart';
 
 
 class IntervalTimer extends ChangeNotifier {
@@ -15,6 +17,8 @@ class IntervalTimer extends ChangeNotifier {
   bool isSimple = false;
   Duration avgWorkTime = Duration();
   Duration avgRestTime = Duration();
+  
+  bool isSoundPlayed = false;
 
   static const Duration defaultWork = Duration(minutes: 1);
   static const Duration defaultRest = Duration(seconds: 30); 
@@ -218,6 +222,12 @@ class IntervalTimer extends ChangeNotifier {
       _roundIndex++;
       round++;      
       startRound();
+    }
+    if(isComplete() && !isSoundPlayed)
+    {
+      isSoundPlayed = true;
+      SoundPlayer(audioPath: "audio/alarm.mp3");
+
     }
     notifyListeners();
   }
