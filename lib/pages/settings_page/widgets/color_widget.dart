@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fitness_app/common/config/timer_background.dart';
 
+/// Popup containing palette of [ColorWidget]. 
+/// 
+/// Returns [Color] of selected [ColorWidget] 
 class ColorPaletteWidget extends StatelessWidget
 {
-  List<ColorWidget> topHalf = [];
-  List<ColorWidget> botHalf = [];
+  final List<ColorWidget> topHalf = [];
+  final List<ColorWidget> botHalf = [];
   final ValueChanged<Color> onColorWidgetPressed;
   
   ColorPaletteWidget({

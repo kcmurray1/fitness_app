@@ -1,20 +1,23 @@
 import 'package:fitness_app/utilities/color_utils.dart';
 import 'package:flutter/material.dart';
+
+/// Access User Configuration data 
 class UserConfig {
 
-  static bool isValidKey(data, key)
+  static bool _isValidKey(data, key)
   {
     return (data["user"] != null && data["user"][key] != null);
   }
 
   static dynamic getKey(dynamic data, String key, dynamic defaultVal) {
-    // Return defaultValue if the key is invalid or 
-    return isValidKey(data, key) ? data["user"][key] : defaultVal;
+    // Return defaultValue if the key is invalid 
+    return _isValidKey(data, key) ? data["user"][key] : defaultVal;
   }
 
-  static updateKey(dynamic data, String key, Function onUpdate)
+  /// Perform action [onUpdate] on the value of [data] at a given [key]
+  static _updateKey(dynamic data, String key, Function onUpdate)
   {
-    if(isValidKey(data, key))
+    if(_isValidKey(data, key))
     {
       onUpdate();
     }
@@ -31,7 +34,6 @@ class UserConfig {
 
   static Color getRestColor(dynamic storage)
   {
-
     var res = getKey(storage, "rest_color", Colors.red);
     if(res is String)
     {
@@ -42,7 +44,7 @@ class UserConfig {
 
   static setRestColor(dynamic storage, Color color)
   {
-    updateKey(storage, "rest_color", (){
+    _updateKey(storage, "rest_color", (){
       storage["user"]["rest_color"] = ColorUtils.serialize(color);
     });
   }
@@ -50,7 +52,7 @@ class UserConfig {
   
   static setWorkColor(dynamic storage, Color color)
   {
-    updateKey(storage, "work_color", (){
+    _updateKey(storage, "work_color", (){
       storage["user"]["work_color"] = ColorUtils.serialize(color);
     });
   }

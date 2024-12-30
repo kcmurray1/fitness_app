@@ -1,7 +1,3 @@
-
-
-import 'dart:convert';
-
 import 'package:fitness_app/common/config/timer_background.dart';
 import 'package:fitness_app/common/config/user_config.dart';
 import 'package:fitness_app/pages/settings_page/widgets/color_selector.dart';
@@ -22,22 +18,23 @@ class _SettingsPageState extends State<SettingsPage>
   double colorWidgetSpacing = 50;
 
 
-   JsonStorage _configStorage =  JsonStorage(
+  JsonStorage _configStorage =  JsonStorage(
     fileName: "user_config.json",
     defaultValue: {"work_color" : ColorUtils.serialize(TimerBackgroundColors.limeGreen), 
                    "rest_color": ColorUtils.serialize(TimerBackgroundColors.red)},
     defaultKey: "user"
   );
 
+  /// Local copy of data stored in [_configStorage]
+  /// 
+  /// Used to 
   dynamic presetData; 
 
    void _loadPresetData()
   {
-    print("settings.loading");
     _configStorage.read().then((value){
       setState(() {
         presetData = value;
-        print(presetData);
       }); 
     });
   }
@@ -46,8 +43,7 @@ class _SettingsPageState extends State<SettingsPage>
   void initState()
   {
     super.initState();
-    _loadPresetData();
-    
+    _loadPresetData(); 
   }
 
   @override
@@ -57,13 +53,11 @@ class _SettingsPageState extends State<SettingsPage>
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
         children: [
-          
           ListTile(title: Text("Settings", style: TextStyle(fontSize: 50))),
           ListTile(title: Text("colors", style: textStyle)),
           if(presetData != null)
@@ -87,12 +81,13 @@ class _SettingsPageState extends State<SettingsPage>
             )
           ),
           ElevatedButton(
-            onPressed: (){
+            onPressed: (){},
+            onLongPress: (){
               setState(() {
                 _configStorage.clear();  
               });
             },
-            child: Text("USE DEFAULT"),
+            child: Text("HOLD TO USE DEFAULT"),
           )
         ],
       )); 

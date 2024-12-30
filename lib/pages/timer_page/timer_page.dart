@@ -69,9 +69,7 @@ class _TimerPage extends State<TimerPage>
             buildCustomButton(
               text: timer.isRunning() ? "PAUSE" : "RESUME",
               context: context,
-              onHold: (){
-
-              },
+              onHold: (){},
               onPressed: ()
               {
                 if (timer.isRunning())
@@ -173,7 +171,6 @@ class _TimerPage extends State<TimerPage>
                   children:  [
                     buildCustomButton(
                       text: "HOLD TO EXIT",
-                      // width: 300,
                       context: context,
                       onPressed: (){},
                       onHold: ()

@@ -3,6 +3,9 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
 /// Retrieve and update user data using json types
+/// [JsonStorage] uses [JsonStorage._cache] attribute to reduce file reads/writes
+/// 
+/// Must use [JsonStorage.save] to save to file
 class JsonStorage
 {
   final String fileName;
@@ -52,7 +55,6 @@ class JsonStorage
     {
       _cache[defaultKey ?? "default"] = defaultValue;
     }
-    print("JsonStorage read $_cache");
     return _cache;
   }
 
@@ -61,18 +63,20 @@ class JsonStorage
   Future<File> save({String? name}) async
   {
      final File file = await _localFile(name: name);
-
-    print("json_storage saving: $_cache");
-    // _cache = jsonEncode(data);
+    
     return file.writeAsString(jsonEncode(_cache));
   }
   
+  /// Clears [_cache]
+  /// 
+  /// NOTE: does not save changes unless [JsonStorage.save] is called
   dynamic clear()
   {
     _cache!.clear();
     return _cache;
   }
 
+  /// Removes key-value pair from storage. Does nothing if key does not exist
   dynamic remove(String key)
   {
     return _cache?.remove(key);

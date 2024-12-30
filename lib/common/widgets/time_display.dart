@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Editable display of time following the format '00:00:00'
+/// Editable field of time following the format '00:00:00'
 class TimeDisplayField extends StatefulWidget
 {
   final Duration time;
@@ -70,7 +70,7 @@ class _TimeDisplayFieldState extends State<TimeDisplayField> {
   }
 
   void _updateDuration() {
-     // Try to display the time of the phaseTimer otherwise default to 0
+    // Try to display the time of the phaseTimer otherwise default to 0
     int hours = int.tryParse(_hoursController.text) ?? 0;
     int minutes = int.tryParse(_minutesController.text) ?? 0;
     int seconds = int.tryParse(_secondsController.text) ?? 0;

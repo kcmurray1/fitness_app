@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:fitness_app/pages/settings_page/widgets/color_widget.dart';
 
+/// Display and update circle icon with color [ColorSelector.initialColor] 
 class ColorSelector extends StatefulWidget
 {
   Color initialColor;

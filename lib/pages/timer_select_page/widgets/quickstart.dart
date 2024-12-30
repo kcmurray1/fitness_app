@@ -8,6 +8,7 @@ import 'package:fitness_app/utilities/interval_timer.dart';
 import 'package:fitness_app/utilities/json_storage.dart';
 import 'package:fitness_app/pages/timer_page/timer_page.dart';
 
+/// Direct method of using an [IntervalTimer].
 class QuickStart extends StatefulWidget
 {
   final JsonStorage storage;
@@ -58,6 +59,7 @@ class _QuickStartState extends State<QuickStart>
     widget.storage[_storageId] = toJson();
     widget.storage.save();
   }
+
   dynamic toJson()
   {
     return {"numRounds": widget.numRounds, "work": widget.workTime.inSeconds, "rest": widget.restTime.inSeconds};
@@ -70,7 +72,6 @@ class _QuickStartState extends State<QuickStart>
     return Container(
           color: Colors.white,
           child: ExpansionTile(
-            // collapsedBackgroundColor: Color.fromARGB(255,29,33,71),
             title: Text("Quickstart", style: textStyle),
             children: [
                 Column(
