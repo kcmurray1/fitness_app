@@ -1,5 +1,6 @@
 # Flutter Fitness App
 A local fitness tool aimed to facilitate fitness routines.  
+# [Demo](https://youtu.be/digZoyn4dw4)
 
 ### Possible future features(in no particular order):
 - UI customization
