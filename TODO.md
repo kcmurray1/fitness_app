@@ -79,7 +79,7 @@ Functionality Example:) '+': work time, '=': rest time
 ***TODO #6***
 - GeneralSettingsPage
 	- add settings page [x]
-	- option to select time on/off color
+	- option to select time on/off color [x]
 
 **State Organization** [x]
 - remove use of changenotifierprovider in main.dart [x]

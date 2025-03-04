@@ -1,3 +1,4 @@
+import 'package:fitness_app/pages/timer_page/widgets/sound_player.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -90,7 +91,7 @@ class PhaseTimer extends ChangeNotifier {
     {
       return;
     }
-
+    
     isRunning = true;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if(duration.inMicroseconds == 0)

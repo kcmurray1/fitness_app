@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'phase_timer.dart';
 import 'round.dart';
-import 'package:fitness_app/pages/timer_page/widgets/sound_player.dart';
 
 
 class IntervalTimer extends ChangeNotifier {
@@ -25,6 +24,8 @@ class IntervalTimer extends ChangeNotifier {
 
   String id;
   String name;
+  //FIXME: make into parameter to allow for custom alarm sounds
+  SoundPlayer? _soundPlayer;
 
   IntervalTimer({
     Duration workTime = defaultWork, 
@@ -226,7 +227,7 @@ class IntervalTimer extends ChangeNotifier {
     if(isComplete() && !isSoundPlayed)
     {
       isSoundPlayed = true;
-      SoundPlayer(audioPath: "audio/alarm.mp3");
+      _soundPlayer = SoundPlayer(audioPath: "audio/mobile_effect_digital_alarm.mp3");
 
     }
     notifyListeners();
@@ -235,6 +236,7 @@ class IntervalTimer extends ChangeNotifier {
   // Reset entire IntervalTimer
   void _reset()
   {
+    _soundPlayer?.stop();
     _roundIndex = 0;
     round = 1;
     isStarted = false;
